@@ -1,0 +1,83 @@
+<html>
+<head>
+	<title>Three.js Boilerplate</title>
+	<style>
+		html,body{
+			overflow: hidden;
+		}
+		.container_data{
+			position: fixed;
+			bottom: 30px ;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 35%;
+			margin: 0 auto;
+			height: 100px;
+			display: -webkit-flex;
+			display: -moz-flex;
+			display: -ms-flex;
+			display: -o-flex;
+			display: flex;
+		}
+
+		.element_data{
+			background:blue;
+			opacity: .5;
+			margin-top: auto;
+			transition: .3s background,.3s opacity
+
+
+		}
+		.element_data.is_active{
+			opacity: 1;
+		}
+
+		.element_data.is_previous{
+			background:green;
+			transition: .3s background
+		}
+		.overlay{
+			position: fixed;
+			pointer-events: none;
+			background: rgba(0,0,0, .5);
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			opacity: 0;
+			transition: .4s opacity
+
+		}
+		.overlay_co2{
+			margin-top: 200px;
+			font-size: 200px;
+			text-align: center;
+			width: 100%;
+			color: #fff
+		}
+
+		.overlay_year{
+			font-size: 50px;
+			text-align: center;
+			width: 100%;
+			color: #fff
+		}
+
+		.overlay.is_scrolling{
+			opacity: 1;
+			transition: .4s opacity
+		}
+	</style>
+</head>
+<body>
+	<a id="link" href="">link</a>
+	<div id="main"></div>
+	<div class="overlay">
+		<div class="overlay_co2"></div>
+		<div class="overlay_year"></div>
+	</div>
+	<div class="container_data"></div>
+</body>
+</html>
