@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Three.js Boilerplate</title>
+	<title>Dataviz</title>
 	<style>
 		html,body{
 			overflow: hidden;
@@ -21,7 +21,7 @@
 		}
 
 		.element_data{
-			background:blue;
+			background:white;
 			opacity: .5;
 			margin-top: auto;
 			transition: .3s background,.3s opacity
@@ -69,10 +69,14 @@
 			opacity: 1;
 			transition: .4s opacity
 		}
+
+		.element_data.is-hover{
+			background-color:red;
+		}
+
 	</style>
 </head>
 <body>
-	<a id="link" href="">link</a>
 	<div id="main"></div>
 	<div class="overlay">
 		<div class="overlay_co2"></div>

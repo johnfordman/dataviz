@@ -30,6 +30,12 @@ const NumberUtils = {
     let diff = to - from
     let divide = diff / from
     return divide * 100
+  },
+  previsionnalCalcul(taux2009,taux2014){
+    return taux2009 + ( ( taux2014 - taux2009 ) / 5 ) * ( 2027 - 2009 )
+  },
+  calcPercent(val1,val2){
+    return (val1 / val2) * 100
   }
 
 };

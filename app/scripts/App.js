@@ -5,6 +5,8 @@ import _ from 'underscore';
 import numbersUtils from '../helpers/numbersUtils';
 import apiUtils from '../helpers/apiUtils';
 
+import Scene from './Scene.js'
+
 
 export default class App {
 
@@ -39,7 +41,7 @@ export default class App {
        //console.log(this.datas.countryName)
        var worldArr = this.datas.World
 
-       var itemArr = this.datas.World
+       var itemArr = this.datas.China
        var elementW = 100 / (itemArr.length - 1);
 
        itemArr.map((item,index)=>{
@@ -85,6 +87,9 @@ export default class App {
        var minValWithQuote =  "'" + this.valueMin + "'";
        var maxValWithQuote =  "'" + this.valueMax + "'";
 
+       var taux2009 = this.valueArr[this.valueArr.length -6]
+       var taux2014 = this.valueArr[this.valueArr.length -1]
+
        var elementMin = document.querySelector("[data-value=" + minValWithQuote + "]");
        var elementMax = document.querySelector("[data-value=" + maxValWithQuote + "]");
        //console.log(elementMin)
@@ -102,15 +107,19 @@ export default class App {
 
        console.log('kt co2 global dans le monde : ',Math.round(this.averrageWorld))
        console.log('global increase  or decrease dans le monde : ',numbersUtils.increasePercent(this.worldArr[0],this.worldArr[this.worldArr.length - 1]))
+       console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
+       console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
+       let scene = new Scene();
 
+       console.log(scene)
        this.lastValue = this.valueArr[0]
        this.slides = document.querySelectorAll('.element_data')
        this.scroll()
        this.scrollStop()
+       this.hoverBar()
      })
   }
-
 
   scroll(){
     let i = 0;
@@ -131,8 +140,10 @@ export default class App {
         self.barYearActif = self.slides[i].dataset.year
         self.overlayText.innerText = self.barCo2Actif
         self.overlayYear.innerText = self.barYearActif
+        console.log('global increase  or decrease en france depuis 1960 jusquen:', numbersUtils.increasePercent(self.valueArr[0],self.barCo2Actif))
+        console.log('global increase  or decrease en france entre ancienne et currentValue:', numbersUtils.increasePercent(self.lastValue,self.barCo2Actif))
 
-        console.log(self.barCo2Actif)
+        //console.log(self.barCo2Actif)
 
       }
       else {
@@ -152,33 +163,46 @@ export default class App {
                self.barYearActif = self.slides[i].dataset.year
                self.overlayText.innerText = self.barCo2Actif
                self.overlayYear.innerText = self.barYearActif
-               console.log('global increase  or decrease en france depuis 1960 jusquen:', numbersUtils.increasePercent(self.valueArr[0],self.barCo2Actif))
+               console.log('global increase  ojr decrease en france depuis 1960 jusquen:', numbersUtils.increasePercent(self.valueArr[0],self.barCo2Actif))
                console.log('global increase  or decrease en france entre ancienne et currentValue:', numbersUtils.increasePercent(self.lastValue,self.barCo2Actif))
-             //console.log(self.barCo2Actif)
+               //console.log(self.barCo2Actif)
+             }
            }
+           document.body.addEventListener('mousewheel', _.throttle(callback, 80, true))
+
          }
-         document.body.addEventListener('mousewheel', _.throttle(callback, 80, true))
 
-       }
+         scrollStop() {
+          var isScrolling;
+          window.addEventListener('mousewheel', ( event ) => {
 
-       scrollStop() {
-        var isScrolling;
-        window.addEventListener('mousewheel', ( event ) => {
+            window.clearTimeout( isScrolling );
 
-          window.clearTimeout( isScrolling );
+            isScrolling = setTimeout(()=> {
 
-          isScrolling = setTimeout(()=> {
-
-            console.log( 'Scrolling has stopped.' );
-            this.lastValue = this.barCo2Actif
-            this.overlay.classList.remove('is_scrolling')
+              console.log( 'Scrolling has stopped.' );
+              this.lastValue = this.barCo2Actif
+              this.overlay.classList.remove('is_scrolling')
 
 
-          }, 500);
+            }, 500);
 
-        }, false);
+          }, false);
+        }
+
+
+        hoverBar(){
+          for(let i = 0;i < this.slides.length;i++){
+            this.slides[i].addEventListener('mouseover',function(){
+              this.classList.add('is-hover')
+            })
+
+            this.slides[i].addEventListener('mouseout',function(){
+              this.classList.remove('is-hover')
+            })
+          }
+        }
       }
-    }
 
 
 

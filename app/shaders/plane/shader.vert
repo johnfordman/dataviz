@@ -9,9 +9,9 @@
 #include <logdepthbuf_pars_vertex>
 #include <clipping_planes_pars_vertex>
 
-#define SCALE 50.0
-//varying vec2 vUv;
 uniform float uTime;
+#define SCALE 50.0
+varying vec2 vUv;
 
 //
 // Description : Array and textureless GLSL 2D/3D/4D simplex
@@ -116,13 +116,13 @@ float snoise(vec3 v)
   return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1),
     dot(p2,x2), dot(p3,x3) ) );
 }
-
 float calculateSurface(float x, float z) {
   float y = 0.0;
   y += sin(x * 2.8 / SCALE + uTime * 1.5);
   y += sin(z * 2.45 / SCALE + uTime * 1.7);
   return y;
 }
+
 
 void main() {
 
@@ -142,18 +142,11 @@ void main() {
 
 	#include <begin_vertex>
 
-  //vUv = uv;
-  vUv = vUv * 5.0;
+  vUv = uv;
 
   float strength = 1.0;
-  //transformed.y += strength * calculateSurface(transformed.x, transformed.z);
-  //transformed.y -= strength * calculateSurface(0.0, 0.5);
-
-  //gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.1);
-
-  transformed = position + (snoise(vec3(transformed.x,transformed.y + uTime / 200. ,transformed.z + uTime / 200.)) / 10. ) ;
-
-  //transformed.z = (snoise(vec3(transformed.x, u_time * speed + transformed.y, transformed.z ) * .04) )  ;
+  transformed.y += strength * calculateSurface(transformed.x, transformed.z);
+  transformed.y -= strength * calculateSurface(0.0, 0.5);
 
 	#include <morphtarget_vertex>
 	#include <skinning_vertex>
