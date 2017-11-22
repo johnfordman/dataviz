@@ -7,11 +7,10 @@ import Stats from '../libs/stats.min.js'
 import datGui from '../../node_modules/dat.gui/build/dat.gui.min'
 import vertShader from '../shaders/plane/shader.vert'
 import fragShader from '../shaders/plane/shader.frag'
-
 import OrbitControls from 'imports-loader?THREE=three!exports-loader?THREE.OrbitControls!three/examples/js/controls/OrbitControls' // eslint-disable-line import/no-webpack-loader-syntax
-
-
 import textureWater from '../textures/water-zelda.png'
+
+import Snow from './Snow'
 
 export default class Scene {
 
@@ -72,6 +71,7 @@ export default class Scene {
 		//this.scene.add(this.sphere)
 
 		this.initSea()
+        this.initSnow()
 
 
 		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -82,7 +82,6 @@ export default class Scene {
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this.renderer.animate( this.render.bind(this) );
 	}
-
 
 	initSea(){
 		this.meshSea = new THREE.Object3D();
@@ -117,7 +116,6 @@ export default class Scene {
     	});
     	this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
 
-
     	var textureLoader = new THREE.TextureLoader();
     	textureLoader.load(textureWater, (texture) => {
     		console.log(texture)
@@ -133,7 +131,7 @@ export default class Scene {
 
     var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
     var matWaves = new THREE.MeshPhongMaterial( {
-      color:0x3300ff,
+      color:0x00000,
       flatShading:true
     });
     var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
@@ -143,6 +141,10 @@ export default class Scene {
     this.meshSea.add(seaBed);
     this.scene.add(this.meshSea)
 
+}
+
+initSnow(){
+    this.snow = new Snow(this.scene)
 }
 
 onWindowResize() {
@@ -172,6 +174,8 @@ render() {
    this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
    this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
    this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
+
+   this.snow.update()
 
    this.renderer.render( this.scene, this.camera );
 }
