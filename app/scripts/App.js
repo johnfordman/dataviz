@@ -11,8 +11,8 @@ import Timeline from './Timeline.js'
 
 export default class App {
 
-	constructor() {
-		this.datas = []
+  constructor() {
+    this.datas = []
     this.index = 0;
     this.container = document.querySelector('.container_data')
     this.overlay = document.querySelector('.overlay')
@@ -65,7 +65,7 @@ export default class App {
        itemArr.map((item,index)=>{
         let barHeight  = numbersUtils.map(item.value, this.valueMin, this.valueMax, 10, this.container.clientHeight);
 
-        var div	= document.createElement('div')
+        var div = document.createElement('div')
         div.classList.add('element_data')
         div.setAttribute('data-value', Math.floor(item.value));
         div.setAttribute('data-year', item.year);
@@ -111,8 +111,8 @@ export default class App {
        console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
-      // let scene = new Scene();
-      let timeline = new Timeline(this.valueArr.length,this.valueArr);
+      let scene = new Scene();
+     // let timeline = new Timeline(this.valueArr.length,this.valueArr);
 
       this.lastValue = this.valueArr[0]
       this.slides = document.querySelectorAll('.element_data')
@@ -131,9 +131,9 @@ export default class App {
          return;
        self.overlay.classList.add('is_scrolling')
 
-				//console.log('up');
-				i--;
-				self.slides[i+1].classList.remove('is_active');
+        //console.log('up');
+        i--;
+        self.slides[i+1].classList.remove('is_active');
 
         self.slides[i].classList.remove('is_previous');
         self.slides[i].classList.add('is_active');
@@ -152,7 +152,7 @@ export default class App {
 
                 //DOWN
                 if(i === self.slides.length - 1)
-                	return;
+                  return;
 
                //console.log('down');
 

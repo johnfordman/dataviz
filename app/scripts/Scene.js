@@ -38,7 +38,7 @@ export default class Scene {
 		//this.controls = new OrbitControls(this.camera)
 
     	//Lights
-    	this.ambientLight = new THREE.AmbientLight(0xffffff);
+        this.hemisphereLight = new THREE.HemisphereLight(0xffffff,0x000000, 1)
 
         //color
         this.color =  new THREE.Color( '#C2F1F2' )
@@ -61,9 +61,8 @@ export default class Scene {
     init(){
     	this.container = document.querySelector( '#main' );
     	document.body.appendChild( this.container );
-    	this.scene.add(this.ambientLight)
+        this.scene.add(this.hemisphereLight);  
     	this.scene.background = this.color;
-
 
     	this.geometry = new THREE.SphereGeometry( 5, 7, 7 );
     	this.material = new THREE.MeshPhongMaterial({ color: 0x000000});
@@ -79,6 +78,8 @@ export default class Scene {
 		this.renderer.setPixelRatio( window.devicePixelRatio );
 		this.renderer.setSize( window.innerWidth, window.innerHeight );
 		this.container.appendChild( this.renderer.domElement );
+        this.renderer.shadowMap.enabled = true; 
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this.renderer.animate( this.render.bind(this) );
 	}
 
@@ -87,16 +88,6 @@ export default class Scene {
 		this.meshSea = new THREE.Object3D();
 
 		let geomWaves = new THREE.PlaneBufferGeometry(2000, 2000, 500, 500);
-    	//geomWaves.rotateX(-Math.PI / 2);
-
-    	// let uniforms = {
-    	// 	uMap: {type: 't', value: null},
-    	// 	uTime: {type: 'f', value: 0},
-    	// 	uColor: {type: 'f', value: new THREE.Color('#307ddd')},
-    	// 	fogColor:    { type: "c", value: scene.fog.color },
-    	// 	fogNear:     { type: "f", value: scene.fog.near },
-    	// 	fogFar:      { type: "f", value: scene.fog.far }
-    	// };
 
     	this.shaderSea = new THREE.ShaderMaterial({
 
@@ -119,7 +110,7 @@ export default class Scene {
     		side: THREE.DoubleSide,
     		fog: true,
     		lights: true,
-    		//transparent:true,
+    		transparent:true,
     		defines         : {
     			USE_MAP: false
     		}
@@ -136,23 +127,22 @@ export default class Scene {
     	});
 
     	this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
-    	console.log(this.meshSea)
+    	//console.log(this.meshSea)
     	//this.meshSea.position.set(0,0,0);
     	//this.meshSea.rotation.x = 1.5
 
-    	this.scene.add(this.meshSea)
+    var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
+    var matWaves = new THREE.MeshPhongMaterial( {
+      color:0x3300ff,
+      flatShading:true
+    });
+    var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
+    seaBed.position.set(0,0,-10);
+    seaBed.castShadow = false;
+    seaBed.receiveShadow = true;
+    this.meshSea.add(seaBed);
+    this.scene.add(this.meshSea)
 
-    // var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
-    // geomSeaBed.applyMatrix(new THREE.Matrix4().makeRotationX(-Math.PI/2));
-    // var matWaves = new THREE.MeshPhongMaterial( {
-    //   color:0xff0000,
-    //   shading:THREE.SmoothShading,
-    // });
-    // var seaBed = new THREE.Mesh(geomSeaBed, matWaves);
-    // seaBed.position.set(0,-10,0);
-    // seaBed.castShadow = false;
-    // seaBed.receiveShadow = true;
-    // this.mesh.add(seaBed);
 }
 
 onWindowResize() {
@@ -173,7 +163,7 @@ initEvent(){
 }
 
 render() {
-   //this.stats.update();
+   this.stats.update();
    var time = performance.now() * 0.0005;
    this.shaderSea.uniforms.uTime.value = time;
 
