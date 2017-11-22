@@ -71,8 +71,7 @@ export default class Snow {
 	}
 
 	this.particleSystem = new THREE.Points( this.systemGeometry, this.systemMaterial );
-	// this.particleSystem.position.y = 0;
-	// this.particleSystem.position.z = 0;
+
 	this.particleSystem.position.x = 10;
 	this.particleSystem.rotation.x = .5
 

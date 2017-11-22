@@ -1,7 +1,5 @@
 export default class Point{
 	constructor(xPos, yPos,value){
-		//this.radius = radius;
-		//this.width = width;
 		this.value = value
 		this.xPos = xPos;
 		this.yPos = yPos;

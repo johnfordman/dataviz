@@ -8,7 +8,6 @@ import apiUtils from '../helpers/apiUtils';
 import Scene from './Scene.js'
 import Timeline from './Timeline.js'
 
-
 export default class App {
 
   constructor() {
@@ -112,7 +111,7 @@ export default class App {
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
       let scene = new Scene();
-     // let timeline = new Timeline(this.valueArr.length,this.valueArr);
+     let timeline = new Timeline(this.valueArr.length,this.valueArr);
 
       this.lastValue = this.valueArr[0]
       this.slides = document.querySelectorAll('.element_data')

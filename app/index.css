@@ -41,3 +41,16 @@ circle {
 
 path {
 }
+
+
+.cursor{
+	display: inline-block;
+	border-radius: 50%;
+	width: 10px;
+	height: 10px;
+	background: red;
+	position: absolute;
+	top:calc(100% - 4px);
+	left: 0;
+	transform: translateY(-5px);
+}
