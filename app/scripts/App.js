@@ -6,6 +6,7 @@ import numbersUtils from '../helpers/numbersUtils';
 import apiUtils from '../helpers/apiUtils';
 
 import Scene from './Scene.js'
+import Timeline from './Timeline.js'
 
 
 export default class App {
@@ -41,7 +42,7 @@ export default class App {
        //console.log(this.datas.countryName)
        var worldArr = this.datas.World
 
-       var itemArr = this.datas.China
+       var itemArr = this.datas.World
        var elementW = 100 / (itemArr.length - 1);
 
        itemArr.map((item,index)=>{
@@ -110,15 +111,15 @@ export default class App {
        console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
-       let scene = new Scene();
+      // let scene = new Scene();
+      let timeline = new Timeline(this.valueArr.length,this.valueArr);
 
-       console.log(scene)
-       this.lastValue = this.valueArr[0]
-       this.slides = document.querySelectorAll('.element_data')
-       this.scroll()
-       this.scrollStop()
-       this.hoverBar()
-     })
+      this.lastValue = this.valueArr[0]
+      this.slides = document.querySelectorAll('.element_data')
+      this.scroll()
+      this.scrollStop()
+      this.hoverBar()
+    })
   }
 
   scroll(){

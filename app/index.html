@@ -18,6 +18,8 @@
 			display: -ms-flex;
 			display: -o-flex;
 			display: flex;
+			display: none;
+
 		}
 
 		.element_data{
@@ -73,7 +75,9 @@
 		.element_data.is-hover{
 			background-color:red;
 		}
-
+		#canvasTimeline{
+			width: 100%;
+		}
 	</style>
 </head>
 <body>
@@ -83,5 +87,16 @@
 		<div class="overlay_year"></div>
 	</div>
 	<div class="container_data"></div>
+	<div class="container-ui">
+		<svg>
+			
+			<rect />
+			<path></path>
+
+
+		</svg>
+
+		<canvas id="canvasTimeline"></canvas>
+	</div>
 </body>
 </html>

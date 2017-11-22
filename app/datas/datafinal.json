@@ -20313,14 +20313,6 @@
 		{
 			"value": "506.046",
 			"year": "2014"
-		},
-		{
-			"value": "0",
-			"year": "2015"
-		},
-		{
-			"value": "0",
-			"year": "2016"
 		}
 	],
 	"Guatemala": [
@@ -56233,7 +56225,7 @@
 			"year": "2016"
 		}
 	],
-	"United States": [
+	"UnitedStates": [
 		{
 			"value": "2880505.507",
 			"year": "1961"
