@@ -26,7 +26,7 @@ varying vec3 vNormal;
 void main() {
 
 	#include <clipping_planes_fragment>
-	vec2 uv = vUv * 50.0 + vec2(uTime * -0.05);
+	vec2 uv = vUv * 35.0 + vec2(uTime * -0.05);
 	uv.y += 0.01 * (sin(uv.x * 3.5 + uTime * 0.35) + sin(uv.x * 4.8 + uTime * 1.05) + sin(uv.x * 7.3 + uTime * 0.45)) / 3.0;
 	uv.x += 0.12 * (sin(uv.y * 4.0 + uTime * 0.5) + sin(uv.y * 6.8 + uTime * 0.75) + sin(uv.y * 11.3 + uTime * 0.2)) / 3.0;
 	uv.y += 0.12 * (sin(uv.x * 4.2 + uTime * 0.64) + sin(uv.x * 6.3 + uTime * 1.65) + sin(uv.x * 8.2 + uTime * 0.45)) / 3.0;
