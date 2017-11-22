@@ -21,6 +21,7 @@ export default class App {
     this.barYearActif = 0
     this.isScrolling = false
     this.valueArr = []
+    this.yearArr = []
     this.worldArr = []
     this.valueMax = 0
     this.valueMin = 0
@@ -59,7 +60,7 @@ export default class App {
        this.worldMin = Math.min.apply(Math, this.worldArr);
        this.averrageWorld = utils.arrAverage(this.worldArr)
 
-       console.log(this.valueArr)
+       //console.log(this.valueArr)
 
        itemArr.map((item,index)=>{
         let barHeight  = numbersUtils.map(item.value, this.valueMin, this.valueMax, 10, this.container.clientHeight);
@@ -110,8 +111,9 @@ export default class App {
        console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
+       this.initYear()
       let scene = new Scene();
-     let timeline = new Timeline(this.valueArr.length,this.valueArr);
+      let timeline = new Timeline(this.valueArr.length,this.valueArr,this.yearArr);
 
       this.lastValue = this.valueArr[0]
       this.slides = document.querySelectorAll('.element_data')
@@ -119,6 +121,14 @@ export default class App {
       this.scrollStop()
       this.hoverBar()
     })
+  }
+
+  initYear(){
+    let year = 1961;
+    for(let i = 0; i < this.valueArr.length; i++){
+      this.yearArr.push(year)
+      year++
+    }
   }
 
   scroll(){

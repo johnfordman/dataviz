@@ -5,15 +5,20 @@ import _ from 'underscore';
 import numbersUtils from '../helpers/numbersUtils';
 import apiUtils from '../helpers/apiUtils';
 import Point from './Point.js'
-import * as d3 from "d3";
 import TweenLite from 'gsap'
 //import DrawSVG from '../libs/gsap/plugins/DrawSVGPlugin'
 
 
 export default class Timeline {
 
-	constructor(nbPoint,valueArr) {
+	constructor(nbPoint,valueArr,yearArr) {
+    //overlay year
+    this.overlay = document.querySelector('.overlay')
+    this.overlayText = document.querySelector('.overlay_co2')
+    this.overlayYear = document.querySelector('.overlay_year')
+
     //Container canvas
+    this.yearArr = yearArr
     this.valueArr = valueArr
     this.valueMax = Math.max.apply(Math, this.valueArr);
     this.valueMin = Math.min.apply(Math, this.valueArr);
@@ -62,46 +67,7 @@ export default class Timeline {
   }
 }
 
-drawline(){
-  console.log(this.posArr)
-  var lineGenerator = d3.line()
-  .curve(d3.curveCardinal);
 
-  var points = [
-  [0, 80],
-  [100, 100],
-  [200, 30],
-  [300, 50],
-  [400, 40],
-  [500, 80]
-  ];
-
-  var pathData = lineGenerator(this.pathPosArr);
-
-  d3.select('path')
-  .attr('d', pathData);
-
-// Also draw points for reference
-d3.select('svg')
-.selectAll('circle')
-.data(this.dataCircleArr)
-.enter()
-.append('circle')
-.attr('cx', function(d) {
-  return d[0];
-})
-.attr('cy', function(d) {
-  return d[1];
-})
-.attr('r', 3)
-.attr('class', 'circle_value')
-.attr('data-value', (d)=> {
- return d[2];
-})
-.attr('data-year', (d)=> {
- return d[3];
-})
-}
 
  drawPoint(){
   console.log('max value',this.valueMax)
@@ -142,7 +108,6 @@ drawLines(){
  this.ctx.restore()
 }
 
-
 drag(){
   var mouseup, mousemove;
   var self = this;
@@ -151,18 +116,29 @@ drag(){
   })
   window.addEventListener('mouseup',function(e){
     self.activeDrag = false;
+    self.overlay.classList.remove('is_scrolling')
+
   })
   window.addEventListener('mousemove', function(e){
-    if(self.activeDrag) {      
+    if(self.activeDrag) {    
+
+      self.overlay.classList.add('is_scrolling')
+  
       var left = e.clientX - window.innerWidth/8;
       var aR = Math.floor(left / self.pointEquidistance); 
-      var a = self.pointArr[aR]
-      var b = self.pointArr[aR + 1]
+      console.log(aR)
+      if(aR >= 0 && aR < self.valueArr.length - 1){
+        self.overlayText.innerText = self.valueArr[aR] 
+        self.overlayYear.innerText = self.yearArr[aR] 
+        var a = self.pointArr[aR]
+        var b = self.pointArr[aR + 1]
 
-      var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
-      var beta = b.yPos - alpha*b.xPos;
-      
-      self.cursor.setAttribute("style", `top: ${alpha*left + beta}; left:${left};`)
+        var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
+        var beta = b.yPos - alpha*b.xPos;
+        self.cursor.setAttribute("style", `top: ${alpha*left + beta}; left:${left};`)
+
+      }
+  
     }
   }); 
 
