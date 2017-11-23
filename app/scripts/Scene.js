@@ -146,7 +146,7 @@ export default class Scene {
 
     initIceFloe(){
         this.icefloe = new Icefloe(this.scene)
-        
+         
         //ordre plus proche (deuxieme parametre le Z)
         this.icefloe.init(-20,150,6.5,4.5,4.5,0)
         this.icefloe.init(40,180,3.5,6,4,1)
@@ -155,6 +155,8 @@ export default class Scene {
         this.icefloe.init(-10,280,8.5,5.5,6.5,0)
         this.icefloe.init(60,330,2.5,6,4,3.5)
         this.icefloe.init(-90,430,5.5,4.5,6.5,0)
+
+        window.STORAGE.icefloe = this.icefloe.iceArr
     }
 
     onWindowResize() {
@@ -179,6 +181,12 @@ export default class Scene {
     var time = performance.now() * 0.0005;
     this.shaderSea.uniforms.uTime.value = time;
 
+  //  this.snow.needsUpdate = true;
+    // console.log(this.timelineValue);
+    
+    // this.snow.numParticles = ...;
+
+
     this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse)
     this.direction_mouse.multiplyScalar(.06)
     this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
@@ -186,7 +194,7 @@ export default class Scene {
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
     this.snow.update()
-   this.icefloe.update()
+    this.icefloe.update()
 
     this.renderer.render( this.scene, this.camera );
  }

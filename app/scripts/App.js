@@ -11,6 +11,10 @@ import Timeline from './Timeline.js'
 export default class App {
 
   constructor() {
+    window.STORAGE = {}
+
+    STORAGE.particuleNb = 10000
+
     this.datas = []
     this.index = 0;
     this.container = document.querySelector('.container_data')
@@ -110,12 +114,17 @@ export default class App {
        console.log('global increase  or decrease dans le monde : ',numbersUtils.increasePercent(this.worldArr[0],this.worldArr[this.worldArr.length - 1]))
        console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
+      
 
-       this.initYear()
+             
+       this.initYear()  
        let scene = new Scene();
-
-       console.log()
        let timeline = new Timeline(this.valueArr.length,this.valueArr,this.yearArr);
+
+      // timeline.on("change", function(){
+      //   scene.timelineValue = this.current;
+
+      //  })
 
        this.lastValue = this.valueArr[0]
        this.slides = document.querySelectorAll('.element_data')

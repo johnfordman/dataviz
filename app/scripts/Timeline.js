@@ -5,13 +5,18 @@ import _ from 'underscore';
 import numbersUtils from '../helpers/numbersUtils';
 import apiUtils from '../helpers/apiUtils';
 import Point from './Point.js'
-import TweenLite from 'gsap'
+import Event from './Event.js'
+
+import TweenMax from 'gsap'
 //import DrawSVG from '../libs/gsap/plugins/DrawSVGPlugin'
 
 
-export default class Timeline {
+export default class Timeline  {
 
 	constructor(nbPoint,valueArr,yearArr) {
+    console.log(window.STORAGE)
+    //iceFloe from storage
+    this.iceArr = window.STORAGE.icefloe
     //overlay year
     this.overlay = document.querySelector('.overlay')
     this.overlayText = document.querySelector('.overlay_co2')
@@ -41,6 +46,8 @@ export default class Timeline {
     this.cursor = document.querySelector('.cursor')
     this.cursorBar = document.querySelector('.cursor-line-move')
 
+    this.eventsList = ["change"]
+
     this.pointArr = []
     this.dataCircleArr = []
     this.pathPosArr = []
@@ -48,6 +55,7 @@ export default class Timeline {
     this.drawPoint()
     this.drawLines()
     this.drag()
+
    // this.createPosArr()
    // this.drawline()
 
@@ -111,27 +119,34 @@ drag(){
     self.containerTimeline.classList.remove('is-grabbing')
     self.activeDrag = false;
     self.overlay.classList.remove('is_scrolling')
-
+    
+    //  window.STORAGE.particuleNb = 10
   })
-  window.addEventListener('mousemove', function(e){
-    if(self.activeDrag) {    
-     self.containerTimeline.classList.add('is-grabbing')
-     self.overlay.classList.add('is_scrolling')
+  window.addEventListener('mousemove',(e) =>{
+    if(this.activeDrag) {    
+     this.containerTimeline.classList.add('is-grabbing')
+     this.overlay.classList.add('is_scrolling')
 
      var left = e.clientX - window.innerWidth/8;
-     var aR = Math.floor(left / self.pointEquidistance); 
-
+     var aR = Math.floor(left / this.pointEquidistance); 
+      this.current = aR;
      if(aR >= 0 && aR < self.valueArr.length - 1){
-      self.overlayText.innerText = self.valueArr[aR] 
-      self.overlayYear.innerText = self.yearArr[aR] 
-      var a = self.pointArr[aR]
-      var b = self.pointArr[aR + 1]
+      this.overlayText.innerText = this.valueArr[aR] 
+      this.overlayYear.innerText = this.yearArr[aR] 
+      var a = this.pointArr[aR]
+      var b = this.pointArr[aR + 1]
 
       var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
       var beta = b.yPos - alpha*b.xPos;
-      self.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
-      self.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
-
+      this.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
+      this.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
+      TweenMax.to(this.iceArr[0].position, 1, {y:400});
+        console.log(this.iceArr[0].position)
+      //this.iceArr[0].scale.z += 1
+      //console.log(this.iceArr[0])
+      //this.iceArr[0].y -= 0.5;
+      //console.log(this.iceArr[0].scale)
+     // self.dispatch("change")
     }
 
   }

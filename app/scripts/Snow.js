@@ -5,11 +5,10 @@ import fragShader from '../shaders/snow/shader.frag'
 export default class Snow {
 	
 	constructor(scene) {
+
 		this.scene = scene
-
-
 		this.particleSystemHeight = 100.0
-		this.numParticles = 10000,
+		this.numParticles = window.STORAGE.particuleNb,
 		this.isLoad = false;
 		this.clock = new THREE.Clock();
 		this.width = 100
@@ -83,6 +82,16 @@ export default class Snow {
 
 	update(){
 		if(this.isLoad){
+			if(this.needsUpdate) {
+				var diff = this.systemGeometry.vertices.length - this.numParticles; 
+				if( diff > 0){
+					// Supprimer des vertices
+				} else {
+					// Ajouter des vertices
+				}
+				this.systemGeometry.vertices.needsUpdate = true;
+				this.needsUpdate = false;
+			}
 			let delta = this.clock.getDelta()
 			let elapsedTime = this.clock.getElapsedTime();
 			this.particleSystem.material.uniforms.elapsedTime.value = elapsedTime * 10;
