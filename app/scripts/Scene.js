@@ -155,10 +155,6 @@ export default class Scene {
         this.icefloe.init(-10,280,8.5,5.5,6.5,0)
         this.icefloe.init(60,330,2.5,6,4,3.5)
         this.icefloe.init(-90,430,5.5,4.5,6.5,0)
-
-        console.log(this.icefloe)
-
-
     }
 
     onWindowResize() {
@@ -190,7 +186,7 @@ export default class Scene {
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
     this.snow.update()
-  //  this.icefloe.update()
+   this.icefloe.update()
 
     this.renderer.render( this.scene, this.camera );
  }

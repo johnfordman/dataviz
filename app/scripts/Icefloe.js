@@ -21,7 +21,7 @@ export default class Icefloe {
 		
 
 	update(){
-		var min = 0.005;
+		var min = 0.01;
 		var max = 0.01;
 		var offset = Math.random() * (max - min) + min;
 
