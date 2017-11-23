@@ -36,17 +36,18 @@ export default class Timeline {
     this.posY = 100-5
 
     this.pointEquidistance = this.containerTimelineW / this.nbPoint;
-   this.canvasTimeline.style.height = this.containerTimelineH
-   this.ctx = this.canvasTimeline.getContext('2d')
-   this.cursor = document.querySelector('.cursor')
+    this.canvasTimeline.style.height = this.containerTimelineH
+    this.ctx = this.canvasTimeline.getContext('2d')
+    this.cursor = document.querySelector('.cursor')
+    this.cursorBar = document.querySelector('.cursor-line-move')
 
-   this.pointArr = []
-   this.dataCircleArr = []
-   this.pathPosArr = []
-   this.firstYear = 1961
+    this.pointArr = []
+    this.dataCircleArr = []
+    this.pathPosArr = []
+    this.firstYear = 1961
     this.drawPoint()
-   this.drawLines()
-   this.drag()
+    this.drawLines()
+    this.drag()
    // this.createPosArr()
    // this.drawline()
 
@@ -69,7 +70,7 @@ export default class Timeline {
 
 
 
- drawPoint(){
+drawPoint(){
   console.log('max value',this.valueMax)
   console.log('min value',this.valueMin)
   for(let i = 0;i < this.nbPoint; i++){
@@ -93,7 +94,7 @@ drawLines(){
 
   this.ctx.moveTo(this.pointArr[0].xPos, this.pointArr[0].yPos)
   for(var i = 0; i< this.pointArr.length; i++){
-  this.ctx.lineTo(this.pointArr[i].xPos, this.pointArr[i].yPos)
+    this.ctx.lineTo(this.pointArr[i].xPos, this.pointArr[i].yPos)
 
   // var xc = (this.pointArr[i].xPos + this.pointArr[i + 1].xPos) / 2;
   // var yc = (this.pointArr[i].yPos + this.pointArr[i + 1].yPos) / 2;
@@ -103,7 +104,8 @@ drawLines(){
   // this.ctx.quadraticCurveTo(this.pointArr.points[i].x, this.pointArr[i].y, this.pointArr[i+1].x,this.pointArr[i+1].y);
 
  //this.ctx.closePath()
- this.ctx.strokeStyle = "black";
+ this.ctx.strokeStyle = "#56F7FD";
+ this.ctx.lineWidth=3;
  this.ctx.stroke()
  this.ctx.restore()
 }
@@ -115,32 +117,34 @@ drag(){
     self.activeDrag = true;
   })
   window.addEventListener('mouseup',function(e){
+    self.containerTimeline.classList.remove('is-grabbing')
     self.activeDrag = false;
     self.overlay.classList.remove('is_scrolling')
 
   })
   window.addEventListener('mousemove', function(e){
     if(self.activeDrag) {    
+     self.containerTimeline.classList.add('is-grabbing')
+     self.overlay.classList.add('is_scrolling')
 
-      self.overlay.classList.add('is_scrolling')
-  
-      var left = e.clientX - window.innerWidth/8;
-      var aR = Math.floor(left / self.pointEquidistance); 
-      console.log(aR)
-      if(aR >= 0 && aR < self.valueArr.length - 1){
-        self.overlayText.innerText = self.valueArr[aR] 
-        self.overlayYear.innerText = self.yearArr[aR] 
-        var a = self.pointArr[aR]
-        var b = self.pointArr[aR + 1]
+     var left = e.clientX - window.innerWidth/8;
+     var aR = Math.floor(left / self.pointEquidistance); 
 
-        var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
-        var beta = b.yPos - alpha*b.xPos;
-        self.cursor.setAttribute("style", `top: ${alpha*left + beta}; left:${left};`)
+     if(aR >= 0 && aR < self.valueArr.length - 1){
+      self.overlayText.innerText = self.valueArr[aR] 
+      self.overlayYear.innerText = self.yearArr[aR] 
+      var a = self.pointArr[aR]
+      var b = self.pointArr[aR + 1]
 
-      }
-  
+      var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
+      var beta = b.yPos - alpha*b.xPos;
+      self.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
+      self.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
+
     }
-  }); 
+
+  }
+}); 
 
 }
 
