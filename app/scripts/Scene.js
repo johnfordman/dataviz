@@ -125,10 +125,7 @@ export default class Scene {
       });
 
       this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
-    	//console.log(this.meshSea)
-    	//this.meshSea.position.set(0,0,0);
-    	//this.meshSea.rotation.x = 1.5
-
+    
         var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
         var matWaves = new THREE.MeshPhongMaterial( {
           color:0x00000,
@@ -149,11 +146,18 @@ export default class Scene {
 
     initIceFloe(){
         this.icefloe = new Icefloe(this.scene)
-        let iceMesh = this.icefloe.iceArr[0]
-        console.log(iceMesh)
-        iceMesh.scale.set(6,4,4)
-        iceMesh.position.set(0,200,0)
-        iceMesh.rotation.x = 1.5
+        
+        //ordre plus proche (deuxieme parametre le Z)
+        this.icefloe.init(-20,150,6.5,4.5,4.5,0)
+        this.icefloe.init(40,180,3.5,6,4,1)
+        this.icefloe.init(70,250,6,4,4,0)
+        this.icefloe.init(-60,200,3.5,6,4,3.9)
+        this.icefloe.init(-10,280,8.5,5.5,6.5,0)
+        this.icefloe.init(60,330,2.5,6,4,3.5)
+        this.icefloe.init(-90,430,5.5,4.5,6.5,0)
+
+        console.log(this.icefloe)
+
 
     }
 
@@ -175,20 +179,20 @@ export default class Scene {
    }
 
    render() {
-     this.stats.update();
-     var time = performance.now() * 0.0005;
-     this.shaderSea.uniforms.uTime.value = time;
+    this.stats.update();
+    var time = performance.now() * 0.0005;
+    this.shaderSea.uniforms.uTime.value = time;
 
-     this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse)
-     this.direction_mouse.multiplyScalar(.06)
-     this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
-     this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
-     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
+    this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse)
+    this.direction_mouse.multiplyScalar(.06)
+    this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
+    this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
+    this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
-     this.snow.update()
-     this.icefloe.update()
+    this.snow.update()
+  //  this.icefloe.update()
 
-     this.renderer.render( this.scene, this.camera );
+    this.renderer.render( this.scene, this.camera );
  }
 }
 

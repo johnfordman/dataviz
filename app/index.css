@@ -67,7 +67,6 @@ html, body {
 	left: 0;
 	z-index: 1;
 	margin-top: -7px;
-	margin-left: -3px;
 	opacity: 0;
 	transition: .5s opacity ease;
 }

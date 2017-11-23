@@ -3,16 +3,22 @@ export default class Icefloe {
 		this.scene = scene
 		this.iceArr = []
 		this.init()
+		this.posX
 	}	
 
-	init(){
-		var geometry = new THREE.CylinderGeometry( 5, 5, 2, 5,1,false,0,6.3);
-		var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
-		var cylinder = new THREE.Mesh( geometry, material );
-		this.iceArr.push(cylinder)
-
-		this.scene.add(cylinder)
+	init(posX,posY,scaleX,scaleY,scaleZ,rotationY){
+			var geometry = new THREE.CylinderGeometry( 5, 5, 2, 5,1,false,0,6.3);
+			var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+			var iceMesh = new THREE.Mesh( geometry, material );
+			iceMesh.position.set(posX,posY,0)
+			iceMesh.scale.set(scaleX,scaleY,scaleZ)
+			iceMesh.rotation.x = 1.5
+			iceMesh.rotation.y = rotationY
+			//iceMesh.scale.set(6,4,4)
+			this.iceArr.push(iceMesh)
+			this.scene.add(iceMesh)
 	}
+		
 
 	update(){
 		var min = 0.005;

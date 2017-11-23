@@ -113,6 +113,8 @@ export default class App {
 
        this.initYear()
        let scene = new Scene();
+
+       console.log()
        let timeline = new Timeline(this.valueArr.length,this.valueArr,this.yearArr);
 
        this.lastValue = this.valueArr[0]

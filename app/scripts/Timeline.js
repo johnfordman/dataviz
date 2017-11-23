@@ -57,8 +57,7 @@ export default class Timeline {
   for(let i = 0;i < this.nbPoint; i++){
     var posPath = []
     var dataCircle = []
-    let pointY  = numbersUtils.map(this.valueArr[i], this.valueMin, this.valueMax, 100-5, 0+5);
-
+    let pointY  = numbersUtils.map(this.valueArr[i], this.valueMin, this.valueMax, 100-5, 5);
     posPath.push(this.posX,pointY)
     dataCircle.push(this.posX,pointY,this.valueArr[i],this.firstYear)
     this.posX += this.pointEquidistance
@@ -73,17 +72,15 @@ export default class Timeline {
 drawPoint(){
   console.log('max value',this.valueMax)
   console.log('min value',this.valueMin)
+  console.log(this.valueArr)
+
   for(let i = 0;i < this.nbPoint; i++){
-    let pointY  = numbersUtils.map(this.valueArr[i], this.valueMin, this.valueMax, 100-5, 0+5);
-
+    let pointY  = numbersUtils.map(this.valueArr[i], this.valueMin, this.valueMax, 100-5, 5);
     let point = new Point(this.posX,pointY,this.valueArr[i]);
-
     point.draw(this.ctx);
     this.pointArr.push(point);
     this.posX += this.pointEquidistance
   }
-
-  console.log(this.pointArr)
 }
 
 drawLines(){
@@ -96,14 +93,8 @@ drawLines(){
   for(var i = 0; i< this.pointArr.length; i++){
     this.ctx.lineTo(this.pointArr[i].xPos, this.pointArr[i].yPos)
 
-  // var xc = (this.pointArr[i].xPos + this.pointArr[i + 1].xPos) / 2;
-  // var yc = (this.pointArr[i].yPos + this.pointArr[i + 1].yPos) / 2;
-  // this.ctx.quadraticCurveTo(this.pointArr[i].xPos, this.pointArr[i].yPos, xc, yc);
 }
 
-  // this.ctx.quadraticCurveTo(this.pointArr.points[i].x, this.pointArr[i].y, this.pointArr[i+1].x,this.pointArr[i+1].y);
-
- //this.ctx.closePath()
  this.ctx.strokeStyle = "#56F7FD";
  this.ctx.lineWidth=3;
  this.ctx.stroke()
