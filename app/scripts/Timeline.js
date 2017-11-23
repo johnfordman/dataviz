@@ -11,11 +11,12 @@ import TweenMax from 'gsap'
 //import DrawSVG from '../libs/gsap/plugins/DrawSVGPlugin'
 
 
-export default class Timeline  {
+export default class Timeline extends Event {
 
 	constructor(nbPoint,valueArr,yearArr) {
     console.log(window.STORAGE)
     //iceFloe from storage
+    super()
     this.iceArr = window.STORAGE.icefloe
     //overlay year
     this.overlay = document.querySelector('.overlay')
@@ -46,7 +47,7 @@ export default class Timeline  {
     this.cursor = document.querySelector('.cursor')
     this.cursorBar = document.querySelector('.cursor-line-move')
 
-    this.eventsList = ["change"]
+    this.eventsList = ["drag","dragup"]
 
     this.pointArr = []
     this.dataCircleArr = []
@@ -101,25 +102,24 @@ drawLines(){
   for(var i = 0; i< this.pointArr.length; i++){
     this.ctx.lineTo(this.pointArr[i].xPos, this.pointArr[i].yPos)
 
-}
+  }
 
- this.ctx.strokeStyle = "#56F7FD";
- this.ctx.lineWidth=3;
- this.ctx.stroke()
- this.ctx.restore()
+  this.ctx.strokeStyle = "#56F7FD";
+  this.ctx.lineWidth=3;
+  this.ctx.stroke()
+  this.ctx.restore()
 }
 
 drag(){
   var mouseup, mousemove;
-  var self = this;
-  this.cursor.addEventListener('mousedown',function(e){
-    self.activeDrag = true;
+  this.cursor.addEventListener('mousedown',(e)=>{
+    this.activeDrag = true;
   })
-  window.addEventListener('mouseup',function(e){
-    self.containerTimeline.classList.remove('is-grabbing')
-    self.activeDrag = false;
-    self.overlay.classList.remove('is_scrolling')
-    
+  window.addEventListener('mouseup',(e) =>{
+    this.containerTimeline.classList.remove('is-grabbing')
+    this.activeDrag = false;
+    this.overlay.classList.remove('is_scrolling')
+    this.dispatch("dragup")
     //  window.STORAGE.particuleNb = 10
   })
   window.addEventListener('mousemove',(e) =>{
@@ -129,8 +129,8 @@ drag(){
 
      var left = e.clientX - window.innerWidth/8;
      var aR = Math.floor(left / this.pointEquidistance); 
-      this.current = aR;
-     if(aR >= 0 && aR < self.valueArr.length - 1){
+     this.current = aR;
+     if(aR >= 0 && aR < this.valueArr.length - 1){
       this.overlayText.innerText = this.valueArr[aR] 
       this.overlayYear.innerText = this.yearArr[aR] 
       var a = this.pointArr[aR]
@@ -140,13 +140,7 @@ drag(){
       var beta = b.yPos - alpha*b.xPos;
       this.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
       this.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
-      TweenMax.to(this.iceArr[0].position, 1, {y:400});
-        console.log(this.iceArr[0].position)
-      //this.iceArr[0].scale.z += 1
-      //console.log(this.iceArr[0])
-      //this.iceArr[0].y -= 0.5;
-      //console.log(this.iceArr[0].scale)
-     // self.dispatch("change")
+      this.dispatch("drag")
     }
 
   }
