@@ -92,19 +92,19 @@ export default class Scene {
       this.shaderSea = new THREE.ShaderMaterial({
 
           uniforms: THREE.UniformsUtils.merge( [
-           THREE.UniformsLib.common,
-           THREE.UniformsLib.specularmap,
-           THREE.UniformsLib.envmap,
-           THREE.UniformsLib.aomap,
-           THREE.UniformsLib.lightmap,
-           THREE.UniformsLib[ "ambient" ],
-           THREE.UniformsLib[ "lights" ],
-           THREE.UniformsLib.fog, {
-            uTime: {type: 'f', value: 0},
-            diffuse: { value: new THREE.Color(0x2EBBBF) },
-            uMap: {type: 't', value: null},
-        }
-        ] ),
+             THREE.UniformsLib.common,
+             THREE.UniformsLib.specularmap,
+             THREE.UniformsLib.envmap,
+             THREE.UniformsLib.aomap,
+             THREE.UniformsLib.lightmap,
+             THREE.UniformsLib[ "ambient" ],
+             THREE.UniformsLib[ "lights" ],
+             THREE.UniformsLib.fog, {
+                uTime: {type: 'f', value: 0},
+                diffuse: { value: new THREE.Color(0x2EBBBF) },
+                uMap: {type: 't', value: null},
+            }
+            ] ),
           vertexShader: vertShader,
           fragmentShader: fragShader,
           side: THREE.DoubleSide,
@@ -112,9 +112,9 @@ export default class Scene {
           lights: true,
           transparent:true,
           defines         : {
-           USE_MAP: false
-       }
-   });
+             USE_MAP: false
+         }
+     });
       this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
 
       var textureLoader = new THREE.TextureLoader();
@@ -159,35 +159,36 @@ export default class Scene {
 
     onWindowResize() {
 
-     this.camera.aspect = window.innerWidth / window.innerHeight;
-     this.camera.updateProjectionMatrix();
-     this.renderer.setSize( window.innerWidth, window.innerHeight );
+       this.camera.aspect = window.innerWidth / window.innerHeight;
+       this.camera.updateProjectionMatrix();
+       this.renderer.setSize( window.innerWidth, window.innerHeight );
 
+   }
+
+   initEvent(){
+       window.addEventListener('mousemove', (event) =>{
+          event.preventDefault()
+          this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+          this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+      },false);
+   }
+
+   render() {
+     this.stats.update();
+     var time = performance.now() * 0.0005;
+     this.shaderSea.uniforms.uTime.value = time;
+
+     this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse)
+     this.direction_mouse.multiplyScalar(.06)
+     this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
+     this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
+     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
+
+     this.snow.update()
+     this.icefloe.update()
+
+     this.renderer.render( this.scene, this.camera );
  }
-
- initEvent(){
-     window.addEventListener('mousemove', (event) =>{
-      event.preventDefault()
-      this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-      this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-  },false);
- }
-
- render() {
-   this.stats.update();
-   var time = performance.now() * 0.0005;
-   this.shaderSea.uniforms.uTime.value = time;
-
-   this.direction_mouse.subVectors(this.mouse, this.cameraPosition_mouse)
-   this.direction_mouse.multiplyScalar(.06)
-   this.cameraPosition_mouse.addVectors(this.cameraPosition_mouse, this.direction_mouse)
-   this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
-   this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
-
-   this.snow.update()
-
-   this.renderer.render( this.scene, this.camera );
-}
 }
 

@@ -14,4 +14,17 @@ export default class Icefloe {
 		this.scene.add(cylinder)
 	}
 
+	update(){
+		var min = 0.005;
+		var max = 0.01;
+		var offset = Math.random() * (max - min) + min;
+
+		for(let i = 0; i < this.iceArr.length; i++){
+			this.iceArr[i].rotation.z = Math.sin(Date.now() * 0.0008)  * Math.PI * 0.05 ;
+			this.iceArr[i].rotation.x = 1.5 +(Math.sin(Date.now() * 0.001 + offset)  * Math.PI * 0.01);
+			this.iceArr[i].position.z = Math.sin(Date.now() * 0.001 + offset)  * -1 ;
+		}
+		
+	}
+
 }
