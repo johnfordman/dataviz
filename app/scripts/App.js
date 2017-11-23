@@ -112,7 +112,7 @@ export default class App {
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
        this.initYear()
-       //let scene = new Scene();
+       let scene = new Scene();
        let timeline = new Timeline(this.valueArr.length,this.valueArr,this.yearArr);
 
        this.lastValue = this.valueArr[0]

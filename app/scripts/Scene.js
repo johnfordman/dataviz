@@ -9,7 +9,7 @@ import vertShader from '../shaders/plane/shader.vert'
 import fragShader from '../shaders/plane/shader.frag'
 import OrbitControls from 'imports-loader?THREE=three!exports-loader?THREE.OrbitControls!three/examples/js/controls/OrbitControls' // eslint-disable-line import/no-webpack-loader-syntax
 import textureWater from '../textures/water-zelda.png'
-
+import Icefloe from  './Icefloe'
 import Snow from './Snow'
 
 export default class Scene {
@@ -26,7 +26,7 @@ export default class Scene {
         this.cameraEasing_mouse = 10
 
         //camera
-        this.fov = 55;
+        this.fov = 45;
         this.camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, 1, 4000 );
         //this.camera.position.z =2000;
         this.camera.position.z = 50;
@@ -61,110 +61,120 @@ export default class Scene {
     	this.container = document.querySelector( '#main' );
     	document.body.appendChild( this.container );
         this.scene.add(this.hemisphereLight);  
-    	this.scene.background = this.color;
+        this.scene.background = this.color;
 
-    	this.geometry = new THREE.SphereGeometry( 5, 7, 7 );
-    	this.material = new THREE.MeshPhongMaterial({ color: 0x000000});
+        this.geometry = new THREE.SphereGeometry( 5, 7, 7 );
+        this.material = new THREE.MeshPhongMaterial({ color: 0x000000});
 
-    	this.sphere = new THREE.Mesh( this.geometry, this.material );
+        this.sphere = new THREE.Mesh( this.geometry, this.material );
 
 		//this.scene.add(this.sphere)
 
-		this.initSea()
+        this.initSea()
         this.initSnow()
+        this.initIceFloe()
 
 
-		this.renderer = new THREE.WebGLRenderer( { antialias: true } );
-		this.renderer.setPixelRatio( window.devicePixelRatio );
-		this.renderer.setSize( window.innerWidth, window.innerHeight );
-		this.container.appendChild( this.renderer.domElement );
+        this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+        this.renderer.setPixelRatio( window.devicePixelRatio );
+        this.renderer.setSize( window.innerWidth, window.innerHeight );
+        this.container.appendChild( this.renderer.domElement );
         this.renderer.shadowMap.enabled = true; 
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-		this.renderer.animate( this.render.bind(this) );
-	}
+        this.renderer.animate( this.render.bind(this) );
+    }
 
-	initSea(){
-		this.meshSea = new THREE.Object3D();
+    initSea(){
+      this.meshSea = new THREE.Object3D();
 
-		let geomWaves = new THREE.PlaneBufferGeometry(2000, 2000, 500, 500);
+      let geomWaves = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
 
-    	this.shaderSea = new THREE.ShaderMaterial({
+      this.shaderSea = new THREE.ShaderMaterial({
 
-    		uniforms: THREE.UniformsUtils.merge( [
-    			THREE.UniformsLib.common,
-    			THREE.UniformsLib.specularmap,
-    			THREE.UniformsLib.envmap,
-    			THREE.UniformsLib.aomap,
-    			THREE.UniformsLib.lightmap,
-    			THREE.UniformsLib[ "ambient" ],
-    			THREE.UniformsLib[ "lights" ],
-    			THREE.UniformsLib.fog, {
-    				uTime: {type: 'f', value: 0},
-    				diffuse: { value: new THREE.Color(0x2EBBBF) },
-    				uMap: {type: 't', value: null},
-    			}
-    			] ),
-    		vertexShader: vertShader,
-    		fragmentShader: fragShader,
-    		side: THREE.DoubleSide,
-    		fog: true,
-    		lights: true,
-    		transparent:true,
-    		defines         : {
-    			USE_MAP: false
-    		}
-    	});
-    	this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
+          uniforms: THREE.UniformsUtils.merge( [
+           THREE.UniformsLib.common,
+           THREE.UniformsLib.specularmap,
+           THREE.UniformsLib.envmap,
+           THREE.UniformsLib.aomap,
+           THREE.UniformsLib.lightmap,
+           THREE.UniformsLib[ "ambient" ],
+           THREE.UniformsLib[ "lights" ],
+           THREE.UniformsLib.fog, {
+            uTime: {type: 'f', value: 0},
+            diffuse: { value: new THREE.Color(0x2EBBBF) },
+            uMap: {type: 't', value: null},
+        }
+        ] ),
+          vertexShader: vertShader,
+          fragmentShader: fragShader,
+          side: THREE.DoubleSide,
+          fog: true,
+          lights: true,
+          transparent:true,
+          defines         : {
+           USE_MAP: false
+       }
+   });
+      this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
 
-    	var textureLoader = new THREE.TextureLoader();
-    	textureLoader.load(textureWater, (texture) => {
-    		console.log(texture)
-    		this.shaderSea.uniforms.uMap.value = texture;
-    		texture.wrapS = THREE.RepeatWrapping;
-    		texture.wrapT = THREE.RepeatWrapping;
-    	});
+      var textureLoader = new THREE.TextureLoader();
+      textureLoader.load(textureWater, (texture) => {
+          this.shaderSea.uniforms.uMap.value = texture;
+          texture.wrapS = THREE.RepeatWrapping;
+          texture.wrapT = THREE.RepeatWrapping;
+      });
 
-    	this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
+      this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
     	//console.log(this.meshSea)
     	//this.meshSea.position.set(0,0,0);
     	//this.meshSea.rotation.x = 1.5
 
-    var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 5, 5);
-    var matWaves = new THREE.MeshPhongMaterial( {
-      color:0x00000,
-      flatShading:true
-    });
-    var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
-    seaBed.position.set(0,0,-10);
-    seaBed.castShadow = false;
-    seaBed.receiveShadow = true;
-    this.meshSea.add(seaBed);
-    this.scene.add(this.meshSea)
+        var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
+        var matWaves = new THREE.MeshPhongMaterial( {
+          color:0x00000,
+          flatShading:true
+      });
+        var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
+        seaBed.position.set(0,0,-10);
+        seaBed.castShadow = false;
+        seaBed.receiveShadow = true;
+        this.meshSea.add(seaBed);
+        this.scene.add(this.meshSea)
 
-}
+    }
 
-initSnow(){
-    this.snow = new Snow(this.scene)
-}
+    initSnow(){
+        this.snow = new Snow(this.scene)
+    }
 
-onWindowResize() {
+    initIceFloe(){
+        this.icefloe = new Icefloe(this.scene)
+        let iceMesh = this.icefloe.iceArr[0]
+        console.log(iceMesh)
+        iceMesh.scale.set(6,4,4)
+        iceMesh.position.set(0,200,0)
+        iceMesh.rotation.x = 1.5
 
-	this.camera.aspect = window.innerWidth / window.innerHeight;
-	this.camera.updateProjectionMatrix();
-	this.renderer.setSize( window.innerWidth, window.innerHeight );
+    }
 
-}
+    onWindowResize() {
 
-initEvent(){
-	window.addEventListener('mousemove', (event) =>{
-		event.preventDefault()
-		this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-		this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+     this.camera.aspect = window.innerWidth / window.innerHeight;
+     this.camera.updateProjectionMatrix();
+     this.renderer.setSize( window.innerWidth, window.innerHeight );
 
-	},false);
-}
+ }
 
-render() {
+ initEvent(){
+     window.addEventListener('mousemove', (event) =>{
+      event.preventDefault()
+      this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+      this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+  },false);
+ }
+
+ render() {
    this.stats.update();
    var time = performance.now() * 0.0005;
    this.shaderSea.uniforms.uTime.value = time;

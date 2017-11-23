@@ -1,20 +1,17 @@
 export default class Icefloe {
 	constructor(scene){
 		this.scene = scene
+		this.iceArr = []
 		this.init()
 	}	
 
 	init(){
-		var cubeMesh = new THREE.Mesh(new THREE.CubeGeometry(1, 2, 1),new THREE.MeshLambertMaterial());
-		
-		this.scene.add(cubeMesh);
-		
-		//change vertex positions
-		cubeMesh.geometry.vertices[1].y += 1;
-		cubeMesh.geometry.vertices[4].y += 1;
+		var geometry = new THREE.CylinderGeometry( 5, 5, 2, 5,1,false,0,6.3);
+		var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+		var cylinder = new THREE.Mesh( geometry, material );
+		this.iceArr.push(cylinder)
 
-		//indicate that the vertices need update
-		cubeMesh.geometry.verticesNeedUpdate = true;
+		this.scene.add(cylinder)
 	}
 
 }
