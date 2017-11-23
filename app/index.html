@@ -1,6 +1,6 @@
 <html>
 <head>
-	<title>Dataviz</title>
+	<title>Climate Change | Gobelins project</title>
 	<link href="./assets/fonts/stylesheet.css" rel="stylesheet">
 	<style>
 		html,body{
@@ -53,17 +53,40 @@
 			transition: .4s opacity
 
 		}
+		.overlay_container{
+			width: 100%;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate3d(-50%,-50%,0);
+		}
+		.overlay_pre{
+			margin-top: 0px;
+			margin-bottom: 0;
+			font-size: 4.563em;
+			line-height: 1em;
+			font-weight: 700;
+			text-align: center;
+			width: 100%;
+			color: #fff
+		}
 		.overlay_co2{
-			margin-top: 200px;
-			font-size: 200px;
+			font-size: 11.438em;
+			line-height: 0.9em;
+			margin-top: 30px;
+			margin-bottom: 30px;
+			font-weight: bold;
 			text-align: center;
 			width: 100%;
 			color: #fff
 		}
 
 		.overlay_year{
-			font-size: 50px;
+			font-size: 6.875em;
+			line-height: 0.8em;
+
 			text-align: center;
+			font-weight: bold;
 			width: 100%;
 			color: #fff
 		}
@@ -82,8 +105,12 @@
 <body>
 	<div id="main"></div>
 	<div class="overlay">
-		<div class="overlay_co2"></div>
-		<div class="overlay_year"></div>
+		<div class="overlay_container">
+			<p class="overlay_pre">Emissions de C02</p>
+			<div class="overlay_co2"></div>
+			<div class="overlay_year"></div>
+		</div>
+		
 	</div>
 	<div class="container_data"></div>
 	<div class="container-ui">

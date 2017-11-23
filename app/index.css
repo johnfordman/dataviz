@@ -4,7 +4,7 @@ html, body {
 
 	background-color: #C2F1F2;
 
- 	font-family: 'Phenomena';
+	font-family: 'Phenomena';
 
 	-webkit-touch-callout: none; /* iOS Safari */
 	-webkit-user-select: none; /* Safari */
@@ -68,6 +68,13 @@ html, body {
 	margin-top: -7px;
 	opacity: 0;
 	transition: .5s opacity ease;
+}
+
+.cursor::after{
+	content: '';
+	background:#fff;
+	display: block;
+	width: .5px;
 }
 
 .cursor_point{

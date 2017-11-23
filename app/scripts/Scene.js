@@ -13,6 +13,7 @@ import Timeline from './Timeline.js'
 import Icefloe from  './Icefloe'
 import Snow from './Snow'
 
+
 export default class Scene {
 
 	constructor() {
@@ -167,13 +168,23 @@ export default class Scene {
 
         timeline.on("drag", () =>{
          console.log("drag")
-         this.isDrag = true
+         this.isDrag = true;
+         TweenMax.to(this.camera,0.5,{fov:50,onUpdate:()=>{
+
+          this.camera.updateProjectionMatrix();
+
+        }});
          //scene.timelineValue = this.current;
        })
 
         timeline.on("dragup", () =>{
          console.log("dragup")
          this.isDrag = false
+         TweenMax.to(this.camera,0.5,{fov:this.fov,onUpdate:()=>{
+
+          this.camera.updateProjectionMatrix();
+
+        }});
          //scene.timelineValue = this.current;
        })
       }
@@ -217,9 +228,9 @@ export default class Scene {
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
   //  this.snow.update()
-    //this.icefloe.update()
+  this.icefloe.update()
 
-    this.renderer.render( this.scene, this.camera );
-  }
+  this.renderer.render( this.scene, this.camera );
+}
 }
 

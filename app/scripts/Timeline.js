@@ -131,8 +131,8 @@ drag(){
      var aR = Math.floor(left / this.pointEquidistance); 
      this.current = aR;
      if(aR >= 0 && aR < this.valueArr.length - 1){
-      this.overlayText.innerText = this.valueArr[aR] 
-      this.overlayYear.innerText = this.yearArr[aR] 
+      this.overlayText.innerText = `${numberWithSpaces(this.valueArr[aR])} kt` 
+      this.overlayYear.innerText = this.yearArr[aR]
       var a = this.pointArr[aR]
       var b = this.pointArr[aR + 1]
 
@@ -145,6 +145,10 @@ drag(){
 
   }
 }); 
+
+  function numberWithSpaces(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
 
 }
 
