@@ -72,6 +72,18 @@ html, body {
 	transition: .5s opacity ease;
 }
 
+.cursor_point{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate3d(-50%,-50%,0);
+	display: inline-block;
+	width: 6px;
+	height: 6px;
+	border-radius: 50%;
+	background: white;
+}
+
 .cursor-line-move{
 	width: 100%;
 	background: #56F7FD;
