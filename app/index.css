@@ -206,3 +206,21 @@ html, body {
 	font-size:1.250em ;
 	font-weight: 200;
 }
+body.is-grabbing{
+	cursor: -webkit-grabbing;
+}
+body.is-grabbing .container-ui canvas{
+	opacity: 1;
+	transform: translateY(0px);
+	transition: .5s opacity ease,.5s transform ease;
+}
+
+body.is-grabbing .container-ui .cursor{
+	opacity: 1;
+	transition: .3s opacity ease .5s;
+}
+
+body.is-grabbing .container-ui .cursor-line-move{
+	opacity: 0;
+	transition: .3s opacity ease;
+}

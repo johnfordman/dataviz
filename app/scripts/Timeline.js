@@ -117,13 +117,15 @@ drag(){
     this.fixDataContainer.classList.remove('is_hidden')
     this.containerTimeline.classList.remove('is-grabbing')
     this.activeDrag = false;
+    document.querySelector('body').classList.remove('is-grabbing')
     this.overlay.classList.remove('is_scrolling')
     this.dispatch("dragup")
-    //  window.STORAGE.particuleNb = 10
   })
   window.addEventListener('mousemove',(e) =>{
     if(this.activeDrag) {    
       this.fixDataContainer.classList.add('is_hidden')
+      document.querySelector('body').classList.add('is-grabbing')
+
       this.containerTimeline.classList.add('is-grabbing')
       this.overlay.classList.add('is_scrolling')
 
