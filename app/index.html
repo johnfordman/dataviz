@@ -65,7 +65,7 @@
 			margin-bottom: 0;
 			font-size: 4.563em;
 			line-height: 1em;
-			font-weight: 700;
+			font-weight: normal;
 			text-align: center;
 			width: 100%;
 			color: #fff
@@ -93,7 +93,7 @@
 
 		.overlay.is_scrolling{
 			opacity: 1;
-			transition: .4s opacity
+			transition: .4s opacity .2s
 		}
 
 		.element_data.is-hover{
@@ -103,6 +103,7 @@
 	</style>
 </head>
 <body>
+	<h1 class="title">Le monde</h1>
 	<div id="main"></div>
 	<div class="overlay">
 		<div class="overlay_container">
@@ -110,7 +111,28 @@
 			<div class="overlay_co2"></div>
 			<div class="overlay_year"></div>
 		</div>
-		
+	</div>
+	<div class="fix_data-container">
+		<div class="fix_data-col">
+			<div class="fix_data maxco2">
+				<div class="fix_data-number"></div>
+				<p class="fix_data-text">Emissions maximum de CO2 dans le monde.</p>
+			</div>
+			<div class="fix_data minco2">
+				<div class="fix_data-number"></div>
+				<p class="fix_data-text">Emissions minimum de CO2 dans le monde.</p>
+			</div>
+		</div>
+		<div class="fix_data-col">
+			<div class="fix_data averrageco2">
+				<div class="fix_data-number"></div>
+				<p class="fix_data-text">Moyenne des émisions de CO2 par an.</p>
+			</div>
+			<div class="fix_data percentageco2">
+				<div class="fix_data-number"></div>
+				<p class="fix_data-text">Pourcentage des émisions de CO2 entre 1961 et 2014</p>
+			</div>
+		</div>
 	</div>
 	<div class="container_data"></div>
 	<div class="container-ui">

@@ -13,7 +13,19 @@ html, body {
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none;
 }
+.title{
+	position: fixed;
+	margin: 0;
+	top: .5em;
+	left: 50%;
+	width: 100%;
+	font-size: 1.875em;
+	transform: translate3d(-50%,0,0);
+	text-align: center;
+	color: #2EBBBF;
+	text-transform: uppercase;
 
+}
 .container-ui{
 	overflow: hidden;
 	position: fixed;
@@ -153,4 +165,37 @@ html, body {
 }
 #canvasTimeline{
 	width: 100%;
+}
+.fix_data{
+	margin-bottom: 30px;
+}
+.fix_data-container{
+	position: fixed;
+	width: 95%;
+	left: 50%;
+	top: 50%;
+	transform: translate3d(-50%,-50%,0);
+	color: #fff;
+	transition: .3s opacity ease ;
+	display: -webkit-flex;
+	display: -moz-flex;
+	display: -ms-flex;
+	display: -o-flex;
+	display: flex;
+	justify-content: space-between;
+}
+
+.fix_data-container.is_hidden{
+	opacity: 0;
+	transition: .3s opacity ease ;
+}
+.fix_data-number{
+	font-size:1.875em;
+	font-weight: normal;
+}
+
+.fix_data-text{
+	margin: 0;
+	font-size:1.250em ;
+	font-weight: 200;
 }

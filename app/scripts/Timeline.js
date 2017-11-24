@@ -23,6 +23,9 @@ export default class Timeline extends Event {
     this.overlayText = document.querySelector('.overlay_co2')
     this.overlayYear = document.querySelector('.overlay_year')
 
+    //fixDAta 
+    this.fixDataContainer = document.querySelector('.fix_data-container')
+
     //Container canvas
     this.yearArr = yearArr
     this.valueArr = valueArr
@@ -116,6 +119,7 @@ drag(){
     this.activeDrag = true;
   })
   window.addEventListener('mouseup',(e) =>{
+    this.fixDataContainer.classList.remove('is_hidden')
     this.containerTimeline.classList.remove('is-grabbing')
     this.activeDrag = false;
     this.overlay.classList.remove('is_scrolling')
@@ -124,27 +128,28 @@ drag(){
   })
   window.addEventListener('mousemove',(e) =>{
     if(this.activeDrag) {    
-     this.containerTimeline.classList.add('is-grabbing')
-     this.overlay.classList.add('is_scrolling')
+      this.fixDataContainer.classList.add('is_hidden')
+      this.containerTimeline.classList.add('is-grabbing')
+      this.overlay.classList.add('is_scrolling')
 
-     var left = e.clientX - window.innerWidth/8;
-     var aR = Math.floor(left / this.pointEquidistance); 
-     this.current = aR;
-     if(aR >= 0 && aR < this.valueArr.length - 1){
-      this.overlayText.innerText = `${numberWithSpaces(this.valueArr[aR])} kt` 
-      this.overlayYear.innerText = this.yearArr[aR]
-      var a = this.pointArr[aR]
-      var b = this.pointArr[aR + 1]
+      var left = e.clientX - window.innerWidth/8;
+      var aR = Math.floor(left / this.pointEquidistance); 
+      this.current = aR;
+      if(aR >= 0 && aR < this.valueArr.length - 1){
+        this.overlayText.innerText = `${numberWithSpaces(this.valueArr[aR])} kt` 
+        this.overlayYear.innerText = this.yearArr[aR]
+        var a = this.pointArr[aR]
+        var b = this.pointArr[aR + 1]
 
-      var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
-      var beta = b.yPos - alpha*b.xPos;
-      this.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
-      this.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
-      this.dispatch("drag")
+        var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
+        var beta = b.yPos - alpha*b.xPos;
+        this.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
+        this.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
+        this.dispatch("drag")
+      }
+
     }
-
-  }
-}); 
+  }); 
 
   function numberWithSpaces(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");

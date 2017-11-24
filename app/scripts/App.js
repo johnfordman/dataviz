@@ -21,6 +21,24 @@ export default class App {
     this.overlay = document.querySelector('.overlay')
     this.overlayText = document.querySelector('.overlay_co2')
     this.overlayYear = document.querySelector('.overlay_year')
+    
+    this.containerMaxCo2 = document.querySelector('.maxco2')
+    this.containerMinCo2 = document.querySelector('.minco2')
+    this.containerPercentageCo2 = document.querySelector('.percentageco2')
+    this.containerAverrageCo2 = document.querySelector('.averrageco2')
+
+    this.maxco2Number = this.containerMaxCo2.querySelector('.fix_data-number')
+    this.maxco2Text = this.containerMaxCo2.querySelector('.fix_data-text')
+
+    this.minco2Number = this.containerMinCo2.querySelector('.fix_data-number')
+    this.minco2Text = this.containerMinCo2.querySelector('.fix_data-text')
+
+    this.averrageco2Number = this.containerAverrageCo2.querySelector('.fix_data-number')
+    this.averrageco2Text = this.containerAverrageCo2.querySelector('.fix_data-text')
+
+    this.percentageco2Number = this.containerPercentageCo2.querySelector('.fix_data-number')
+    this.percentageco2Text = this.containerPercentageCo2.querySelector('.fix_data-text')
+
     this.barCo2Actif = 0
     this.barYearActif = 0
     this.isScrolling = false
@@ -115,7 +133,10 @@ export default class App {
        console.log('en 2027 la valeur en kilotone sera de :', numbersUtils.previsionnalCalcul(taux2009,taux2014))
        console.log('en 2014 le pourcentage de  kilotone comparé au monde est de :', Math.floor(numbersUtils.calcPercent(this.valueArr[this.valueArr.length - 1],this.worldArr[this.worldArr.length - 1])))
 
-
+       this.maxco2Number.innerText = `${numberWithSpaces(this.valueMax)} kt (${this.yearWithMaxValue})`
+       this.minco2Number.innerText = `${numberWithSpaces(this.valueMin)} kt (${this.yearWithMinValue})`
+       this.averrageco2Number.innerText = `${numberWithSpaces(Math.floor(this.averrageValue))} kt`
+       this.percentageco2Number.innerText = `${Math.floor(numbersUtils.increasePercent(this.worldArr[0],this.worldArr[this.worldArr.length - 1]))}%`
 
        this.initYear()  
        STORAGE.valuelength = this.valueArr.length
@@ -135,25 +156,29 @@ export default class App {
        this.scroll()
        this.scrollStop()
        this.hoverBar()
-     })
-  }
 
-  initYear(){
-    let year = 1961;
-    for(let i = 0; i < this.valueArr.length; i++){
-      this.yearArr.push(year)
-      year++
-    }
-  }
+       function numberWithSpaces(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+    })
+}
 
-  scroll(){
-    let i = 0;
-    let self = this
-    function callback(e) {
-      if(e.wheelDelta > 0) {
-        if(i === 0)
-         return;
-       self.overlay.classList.add('is_scrolling')
+initYear(){
+  let year = 1961;
+  for(let i = 0; i < this.valueArr.length; i++){
+    this.yearArr.push(year)
+    year++
+  }
+}
+
+scroll(){
+  let i = 0;
+  let self = this
+  function callback(e) {
+    if(e.wheelDelta > 0) {
+      if(i === 0)
+       return;
+     self.overlay.classList.add('is_scrolling')
 
         //console.log('up');
         i--;
