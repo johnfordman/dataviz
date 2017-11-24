@@ -62,7 +62,7 @@ export default class Snow {
 			this.uniforms.texture.value = texture
 			this.isLoad = true
 			this.textureSnow = texture
-			this.systemGeometry = new THREE.Geometry(),
+			this.systemGeometry = new THREE.Geometry()
 	
 			for( var i = 0; i < this.numParticles; i++ ) {
 				var vertex = new THREE.Vector3(
