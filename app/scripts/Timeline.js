@@ -1,14 +1,9 @@
 import utils from '../helpers/utils';
-//import datas from '../datas/datas.json'
-import datas from '../datas/datafinal.json'
-import _ from 'underscore';
 import numbersUtils from '../helpers/numbersUtils';
 import apiUtils from '../helpers/apiUtils';
 import Point from './Point.js'
 import Event from './Event.js'
-
 import TweenMax from 'gsap'
-//import DrawSVG from '../libs/gsap/plugins/DrawSVGPlugin'
 
 
 export default class Timeline extends Event {

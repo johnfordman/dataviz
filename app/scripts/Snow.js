@@ -8,7 +8,7 @@ export default class Snow {
 
 		this.scene = scene
 		this.particleSystemHeight = 100.0
-		this.numParticles = window.STORAGE.particuleNb,
+		this.numParticles = 2000,
 		this.isLoad = false;
 		this.clock = new THREE.Clock();
 		this.width = 100

@@ -144,18 +144,12 @@ export default class App {
        STORAGE.yearArray = this.yearArr
 
        let scene = new Scene();
-       // let timeline = new Timeline(this.valueArr.length,this.valueArr,this.yearArr);
-
-       // timeline.on("change", function(){
-       //   console.log("ok")
-       //   //scene.timelineValue = this.current;
-       // })
-
+       
        this.lastValue = this.valueArr[0]
        this.slides = document.querySelectorAll('.element_data')
-       this.scroll()
-       this.scrollStop()
-       this.hoverBar()
+       //this.scroll()
+       //this.scrollStop()
+       //this.hoverBar()
 
        function numberWithSpaces(x) {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");

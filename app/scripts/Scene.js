@@ -243,9 +243,8 @@ export default class Scene {
 
     timeline.on("drag", () =>{
         // console.log("drag")
-        console.log(STORAGE.currentPos)
         this.isDrag = true;
-        TweenMax.to(this.camera,0.5,{fov:50,onUpdate:()=>{
+        TweenMax.to(this.camera,0.5,{fov:55,onUpdate:()=>{
 
           this.camera.updateProjectionMatrix();
 
@@ -275,15 +274,15 @@ export default class Scene {
        })
 
     timeline.on("dragup", () =>{
-     console.log("dragup")
-     this.isDrag = false
-     TweenMax.to(this.camera,0.5,{fov:this.fov,onUpdate:()=>{
+      //console.log("dragup")
+      this.isDrag = false
+      TweenMax.to(this.camera,0.5,{fov:this.fov,onUpdate:()=>{
 
-      this.camera.updateProjectionMatrix();
+        this.camera.updateProjectionMatrix();
 
-    }});
-         //scene.timelineValue = this.current;
-       })
+      }});
+        //scene.timelineValue = this.current;
+      })
   }
 
   onWindowResize() {
@@ -325,11 +324,10 @@ export default class Scene {
     this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
-  //  this.snow.update()
-  // if(!this.isDrag){
+    //this.snow.update()
     this.icefloe.update()
-  // }
-  this.renderer.render( this.scene, this.camera );
-}
+
+    this.renderer.render( this.scene, this.camera );
+  }
 }
 
