@@ -74,7 +74,7 @@ export default class Scene {
     this.sphere = new THREE.Mesh( this.geometry, this.material );
 
     this.initSea()
-    //this.initSnow()
+    this.initSnow()
     this.initIceFloe()
 
     this.renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -324,7 +324,7 @@ export default class Scene {
     this.camera.position.x =  this.cameraPosition_mouse.x * this.cameraEasing_mouse * -1
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
-    //this.snow.update()
+    this.snow.update()
     this.icefloe.update()
 
     this.renderer.render( this.scene, this.camera );

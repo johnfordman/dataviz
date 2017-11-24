@@ -174,7 +174,10 @@ html, body {
 	width: 100%;
 }
 .fix_data{
-	margin-bottom: 30px;
+	margin-bottom: 40px;
+}
+.fix_data.minco2,.fix_data.fix_data.percentageco2{
+	margin-bottom:0;
 }
 .fix_data-container{
 	position: fixed;
@@ -192,7 +195,7 @@ html, body {
 	justify-content: space-between;
 }
 .fix_data-col-2{
-	width: 19em;
+	width: 34em;
 }
 
 .fix_data-container.is_hidden{
@@ -233,7 +236,7 @@ html, body {
 }
 .fix_data-number{
 	width: 0;
-	font-size:1.875em;
+	font-size: 2.500em;
 	font-weight: normal;
 	letter-spacing: 2.1px; /* Adjust as needed */
 
@@ -244,7 +247,7 @@ html, body {
 
 .fix_data-text{
 	margin: 0;
-	font-size:1.250em ;
+	font-size:1.875em;
 	font-weight: 200;
 	white-space: nowrap;
 	overflow: hidden;
