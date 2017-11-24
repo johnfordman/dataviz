@@ -135,6 +135,7 @@ drag(){
       var left = e.clientX - window.innerWidth/8;
       var aR = Math.floor(left / this.pointEquidistance); 
       this.current = aR;
+      STORAGE.currentPos = this.current
       if(aR >= 0 && aR < this.valueArr.length - 1){
         this.overlayText.innerText = `${numberWithSpaces(this.valueArr[aR])} kt` 
         this.overlayYear.innerText = this.yearArr[aR]

@@ -1,7 +1,5 @@
 import utils from '../helpers/utils';
-import _ from 'underscore';
 import numbersUtils from '../helpers/numbersUtils';
-import apiUtils from '../helpers/apiUtils';
 import TweenMax from "gsap";
 import Stats from '../libs/stats.min.js'
 import datGui from '../../node_modules/dat.gui/build/dat.gui.min'
@@ -18,202 +16,302 @@ export default class Scene {
 
 	constructor() {
 		this.stats =  new Stats();
-        this.stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
-        document.body.appendChild( this.stats.dom );
+    this.stats.showPanel( 0 ); 
+    document.body.appendChild( this.stats.dom );
 
-        //Timeline test Drag
-        this.isDrag = false;
-        
-        //Mouse
-        this.mouse = new THREE.Vector3(0,0,0);
-        this.direction_mouse    = new THREE.Vector3(0, 0, 0);
-        this.cameraPosition_mouse = new THREE.Vector3(0, 0, 0)
-        this.cameraEasing_mouse = 10
+    //Timeline test Drag
+    this.isDrag = false;
+    this.valueMax = Math.max.apply(Math, STORAGE.valueArray);
+    this.valueMin = Math.min.apply(Math, STORAGE.valueArray);
 
-        //camera
-        this.fov = 45;
-        this.camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, 1, 4000 );
-        //this.camera.position.z =2000;
-        this.camera.position.z = 50;
-        this.camera.position.y =  -200;
-        this.camera.lookAt(new THREE.Vector3(0,0,0))
+    //Mouse
+    this.mouse = new THREE.Vector3(0,0,0);
+    this.direction_mouse    = new THREE.Vector3(0, 0, 0);
+    this.cameraPosition_mouse = new THREE.Vector3(0, 0, 0)
+    this.cameraEasing_mouse = 10
+
+    //camera
+    this.fov = 45;
+    this.camera = new THREE.PerspectiveCamera( this.fov, window.innerWidth / window.innerHeight, 1, 4000 );
+    //this.camera.position.z =2000;
+    this.camera.position.z = 50;
+    this.camera.position.y =  -200;
+    this.camera.lookAt(new THREE.Vector3(0,0,0))
 
 		//contrlos
 		//this.controls = new OrbitControls(this.camera)
 
-    	//Lights
-      this.hemisphereLight = new THREE.HemisphereLight(0xffffff,0x000000, 1)
+    //Lights
+    this.hemisphereLight = new THREE.HemisphereLight(0xffffff,0x000000, 1)
 
-        //color
-        this.color =  new THREE.Color( '#C2F1F2' )
-        this.colorDark =  new THREE.Color( '#3468a2' )
-        this.sceneW = window.innerWidth
-        this.sceneH =  window.innerHeight
+    //color
+    this.color =  new THREE.Color( '#C2F1F2' )
+    this.colorDark =  new THREE.Color( '#3468a2' )
+    this.sceneW = window.innerWidth
+    this.sceneH =  window.innerHeight
 
-        this.scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
+    //fog
+    this.scene.fog = new THREE.Fog (0x96E0E2, 100, 800); 
 
-        //fog
-        this.scene.fog = new THREE.Fog (0x96E0E2, 400, 800); 
+    this.init()
+    this.initEvent()
+    this.initTimeline()
+    window.addEventListener('resize', this.onWindowResize.bind(this), false);
+    this.onWindowResize();
 
-        this.init()
-        this.initEvent()
-        this.initTimeline()
-        window.addEventListener('resize', this.onWindowResize.bind(this), false);
-        this.onWindowResize();
+  }
 
-      }
+  init(){
+    this.container = document.querySelector( '#main' );
+    document.body.appendChild( this.container );
+    this.scene.add(this.hemisphereLight);  
+    this.scene.background = this.color;
 
-      init(){
-       this.container = document.querySelector( '#main' );
-       document.body.appendChild( this.container );
-       this.scene.add(this.hemisphereLight);  
-       this.scene.background = this.color;
+    this.geometry = new THREE.SphereGeometry( 5, 7, 7 );
+    this.material = new THREE.MeshPhongMaterial({ color: 0x000000});
 
-       this.geometry = new THREE.SphereGeometry( 5, 7, 7 );
-       this.material = new THREE.MeshPhongMaterial({ color: 0x000000});
-
-       this.sphere = new THREE.Mesh( this.geometry, this.material );
-
-		//this.scene.add(this.sphere)
+    this.sphere = new THREE.Mesh( this.geometry, this.material );
 
     this.initSea()
-       // this.initSnow()
-       this.initIceFloe()
+    //this.initSnow()
+    this.initIceFloe()
 
+    this.renderer = new THREE.WebGLRenderer( { antialias: true } );
+    this.renderer.setPixelRatio( window.devicePixelRatio );
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    this.container.appendChild( this.renderer.domElement );
+    this.renderer.shadowMap.enabled = true; 
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.animate( this.render.bind(this) );
+  }
 
-       this.renderer = new THREE.WebGLRenderer( { antialias: true } );
-       this.renderer.setPixelRatio( window.devicePixelRatio );
-       this.renderer.setSize( window.innerWidth, window.innerHeight );
-       this.container.appendChild( this.renderer.domElement );
-       this.renderer.shadowMap.enabled = true; 
-       this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-       this.renderer.animate( this.render.bind(this) );
-     }
+  initSea(){
+    this.meshSea = new THREE.Object3D();
 
-     initSea(){
-      this.meshSea = new THREE.Object3D();
+    let geomWaves = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
 
-      let geomWaves = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
+    this.shaderSea = new THREE.ShaderMaterial({
 
-      this.shaderSea = new THREE.ShaderMaterial({
-
-        uniforms: THREE.UniformsUtils.merge( [
-         THREE.UniformsLib.common,
-         THREE.UniformsLib.specularmap,
-         THREE.UniformsLib.envmap,
-         THREE.UniformsLib.aomap,
-         THREE.UniformsLib.lightmap,
-         THREE.UniformsLib[ "ambient" ],
-         THREE.UniformsLib[ "lights" ],
-         THREE.UniformsLib.fog, {
-          uTime: {type: 'f', value: 0},
-          diffuse: { value: new THREE.Color(0x2EBBBF) },
-          uMap: {type: 't', value: null},
-        }
-        ] ),
-        vertexShader: vertShader,
-        fragmentShader: fragShader,
-        side: THREE.DoubleSide,
-        fog: true,
-        lights: true,
-        transparent:true,
-        defines         : {
-         USE_MAP: false
-       }
-     });
-      this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
-
-      var textureLoader = new THREE.TextureLoader();
-      textureLoader.load(textureWater, (texture) => {
-        this.shaderSea.uniforms.uMap.value = texture;
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
-      });
-
-      this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
-
-      var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
-      var matWaves = new THREE.MeshPhongMaterial( {
-        color:0x00000,
-        flatShading:true
-      });
-      var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
-      seaBed.position.set(0,0,-10);
-      seaBed.castShadow = false;
-      seaBed.receiveShadow = true;
-      this.meshSea.add(seaBed);
-      this.scene.add(this.meshSea)
-
-    }
-
-    initSnow(){
-      this.snow = new Snow(this.scene)
-    }
-
-    initIceFloe(){
-      this.icefloe = new Icefloe(this.scene)
-
-        //ordre plus proche (deuxieme parametre le Z)
-        this.icefloe.init(-20,150,6.5,4.5,4.5,0)
-        this.icefloe.init(40,180,3.5,6,4,1)
-        this.icefloe.init(70,250,6,4,4,0)
-        this.icefloe.init(-60,200,3.5,6,4,3.9)
-        this.icefloe.init(-10,280,8.5,5.5,6.5,0)
-        this.icefloe.init(60,330,2.5,6,4,3.5)
-        this.icefloe.init(-90,430,5.5,4.5,6.5,0)
+      uniforms: THREE.UniformsUtils.merge( [
+       THREE.UniformsLib.common,
+       THREE.UniformsLib.specularmap,
+       THREE.UniformsLib.envmap,
+       THREE.UniformsLib.aomap,
+       THREE.UniformsLib.lightmap,
+       THREE.UniformsLib[ "ambient" ],
+       THREE.UniformsLib[ "lights" ],
+       THREE.UniformsLib.fog, {
+        uTime: {type: 'f', value: 0},
+        diffuse: { value: new THREE.Color(0x2EBBBF) },
+        uMap: {type: 't', value: null},
       }
+      ] ),
+      vertexShader: vertShader,
+      fragmentShader: fragShader,
+      side: THREE.DoubleSide,
+      fog: true,
+      lights: true,
+      transparent:true,
+      defines         : {
+       USE_MAP: false
+     }
+   });
+    this.material2 = new THREE.MeshPhongMaterial({ color: 0x307ddd});
 
-      initTimeline(){
-        let timeline = new Timeline(STORAGE.valuelength,STORAGE.valueArray,STORAGE.yearArray);
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.load(textureWater, (texture) => {
+      this.shaderSea.uniforms.uMap.value = texture;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.RepeatWrapping;
+    });
 
-        timeline.on("drag", () =>{
-         console.log("drag")
-         this.isDrag = true;
-         TweenMax.to(this.camera,0.5,{fov:50,onUpdate:()=>{
+    this.meshSea = new THREE.Mesh(geomWaves, this.shaderSea);
+
+    var geomSeaBed = new THREE.PlaneBufferGeometry(2000, 2000, 1, 1);
+    var matWaves = new THREE.MeshPhongMaterial( {
+      color:0x00000,
+      flatShading:true
+    });
+    var seaBed = new THREE.Mesh(geomSeaBed, this.material2);
+    seaBed.position.set(0,0,-10);
+    seaBed.castShadow = false;
+    seaBed.receiveShadow = true;
+    this.meshSea.add(seaBed);
+    this.scene.add(this.meshSea)
+
+  }
+
+  initSnow(){
+    this.snow = new Snow(this.scene)
+  }
+
+  initIceFloe(){
+    this.icefloe = new Icefloe(this.scene)
+
+    //ordre plus proche (deuxieme parametre le Z)
+    this.icefloe.init(-20,150,6.5,4.5,4.5,0)
+    this.icefloe.init(40,180,3.5,6,4,1)
+    this.icefloe.init(70,250,6,4,4,0)
+    this.icefloe.init(-60,200,3.5,6,4,3.9)
+    this.icefloe.init(-10,280,8.5,5.5,6.5,0)
+    this.icefloe.init(60,330,2.5,6,4,3.5)
+    this.icefloe.init(-90,430,5.5,4.5,6.5,0)
+
+    this.iceArr = this.icefloe.iceArr
+
+    //initArrPosZ
+    this.icePosZ2 = []
+    this.icePosZ1 = []
+    this.icePosX1 = []
+    this.icePosZ3 = []
+    this.icePosY3 = []
+    this.icePosX3 = []
+
+    this.icePosZ4 = []
+    this.icePosY4 = []
+    this.icePosX4 = []
+
+    this.icePosZ5 = []
+    this.icePosY5 = []
+    this.icePosX5 = []
+
+    this.icePosY6 = []
+    this.icePosZ6 = []
+
+    this.icePosY7 = []
+    this.icePosX7 = []
+    this.icePosZ7 = []
+
+
+    console.log('minval',this.valueMin);
+    for (let i = 0;i < STORAGE.valueArray.length; i++) {
+      let scaleValue2  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -20);
+      this.icePosZ2.push(scaleValue2)
+
+
+      let scaleValue1  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -5);
+      this.icePosZ1.push(scaleValue1)
+
+      let posXvalue1  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, -20, 0);
+      this.icePosX1.push(posXvalue1)
+
+      let scaleValue3  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -10);
+      this.icePosZ3.push(scaleValue3)
+
+      let posValue3 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 250, 200);
+      this.icePosY3.push(posValue3)
+
+      let posXvalue3 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 70, 40);
+      this.icePosX3.push(posXvalue3)
+
+      let scaleValue4  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -60);
+      this.icePosZ4.push(scaleValue4)
+
+      let posValue4 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 200, 210);
+      this.icePosY4.push(posValue4)
+
+      let posXvalue4 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, -60, -45);
+      this.icePosX4.push(posXvalue4)
+
+      let scaleValue5  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -1);
+      this.icePosZ5.push(scaleValue5)
+
+      let posValue5 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 280, 240);
+      this.icePosY5.push(posValue5)
+
+      let posXvalue5 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, -10, -35);
+      this.icePosX5.push(posXvalue5)
+
+      let posYvalue6 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 330, 300);
+      this.icePosY6.push(posYvalue6)
+
+      let posZvalue6 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -40);
+      this.icePosZ6.push(posZvalue6)
+
+      let posYvalue7 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 430, 390);
+      this.icePosY7.push(posYvalue7)
+
+      let posXvalue7 = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, -90, -70);
+      this.icePosX7.push(posXvalue7)
+
+    }
+  }
+
+  initTimeline(){
+    let timeline = new Timeline(STORAGE.valuelength,STORAGE.valueArray,STORAGE.yearArray);
+
+    timeline.on("drag", () =>{
+        // console.log("drag")
+        console.log(STORAGE.currentPos)
+        this.isDrag = true;
+        TweenMax.to(this.camera,0.5,{fov:50,onUpdate:()=>{
 
           this.camera.updateProjectionMatrix();
 
         }});
+        TweenMax.to(this.iceArr[1].position,1,{z:this.icePosZ1[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[1].position,1,{x:this.icePosX1[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[2].position,1,{z:this.icePosZ2[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[3].position,1,{z:this.icePosZ3[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[3].position,1,{y:this.icePosY3[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[3].position,1,{x:this.icePosX3[STORAGE.currentPos]});
+
+        TweenMax.to(this.iceArr[4].position,2,{z:this.icePosZ4[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[4].position,1,{y:this.icePosY4[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[4].position,2,{x:this.icePosX4[STORAGE.currentPos]});
+
+        TweenMax.to(this.iceArr[5].position,1.3,{z:this.icePosZ5[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[5].position,.7,{y:this.icePosY5[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[5].position,1,{x:this.icePosX5[STORAGE.currentPos]});
+        
+        TweenMax.to(this.iceArr[6].position,.6,{y:this.icePosY6[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[6].position,1,{z:this.icePosZ6[STORAGE.currentPos]});
+
+        TweenMax.to(this.iceArr[7].position,1.5,{y:this.icePosY7[STORAGE.currentPos]});
+        TweenMax.to(this.iceArr[7].position,1.5,{x:this.icePosX7[STORAGE.currentPos]});
+
          //scene.timelineValue = this.current;
        })
 
-        timeline.on("dragup", () =>{
-         console.log("dragup")
-         this.isDrag = false
-         TweenMax.to(this.camera,0.5,{fov:this.fov,onUpdate:()=>{
+    timeline.on("dragup", () =>{
+     console.log("dragup")
+     this.isDrag = false
+     TweenMax.to(this.camera,0.5,{fov:this.fov,onUpdate:()=>{
 
-          this.camera.updateProjectionMatrix();
+      this.camera.updateProjectionMatrix();
 
-        }});
+    }});
          //scene.timelineValue = this.current;
        })
-      }
+  }
 
-      onWindowResize() {
+  onWindowResize() {
 
-       this.camera.aspect = window.innerWidth / window.innerHeight;
-       this.camera.updateProjectionMatrix();
-       this.renderer.setSize( window.innerWidth, window.innerHeight );
+   this.camera.aspect = window.innerWidth / window.innerHeight;
+   this.camera.updateProjectionMatrix();
+   this.renderer.setSize( window.innerWidth, window.innerHeight );
 
-     }
+ }
 
-     initEvent(){
-       window.addEventListener('mousemove', (event) =>{
-        event.preventDefault()
-        this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-        this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+ initEvent(){
+   window.addEventListener('mousemove', (event) =>{
+    event.preventDefault()
+    this.mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    this.mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 
-      },false);
-     }
+  },false);
+ }
 
-     render() {
-      this.stats.update();
-      var time = performance.now() * 0.0005;
-      this.shaderSea.uniforms.uTime.value = time;
+ render() {
+  this.stats.update();
+  var time = performance.now() * 0.0005;
+  this.shaderSea.uniforms.uTime.value = time;
 
-      if(this.isDrag){
-       this.icefloe.update()
-     }
+  if(this.isDrag){
+      //  this.iceArr[0].position.y = 1 * time
+     // this.iceArr[1].position.y += .3
+   }
 
   //  this.snow.needsUpdate = true;
     // console.log(this.timelineValue);
@@ -228,8 +326,9 @@ export default class Scene {
     this.camera.position.y =  this.cameraPosition_mouse.y * this.cameraEasing_mouse * -1
 
   //  this.snow.update()
-  this.icefloe.update()
-
+  // if(!this.isDrag){
+    this.icefloe.update()
+  // }
   this.renderer.render( this.scene, this.camera );
 }
 }
