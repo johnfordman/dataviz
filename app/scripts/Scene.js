@@ -144,6 +144,45 @@ export default class Scene {
 
   initSnow(){
     this.snow = new Snow(this.scene)
+    console.log(this.snow.systemMaterial.uniforms.speedH.value)
+    // this.snow.parameters.speedH = .4
+    // this.snow.parameters.speedV = .4
+    // this.snow.parameters.scale = 5.
+    // this.snow.parameters.radiusX = 2.
+    // this.snow.parameters.radiusZ = 2.
+    // this.snow.parameters.size = 80.
+
+    this.speedHarr = []
+    this.speedVarr = []
+    this.scaleArr = []
+    this.radiusXArr = []
+    this.radiusZArr = []
+    this.sizeArr = []
+    
+    for (let i = 0;i < STORAGE.valueArray.length; i++) {
+    let speedHValue = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 1.1, .2);
+    this.speedHarr.push(speedHValue)
+    
+    let speedvValue = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 1.1, .2);
+    this.speedVarr.push(speedvValue)
+
+    let scaleValue = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 7.1, 5.1);
+    this.scaleArr.push(scaleValue)
+
+     let radiusX = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 2.1, 2.5);
+    this.radiusXArr.push(radiusX)
+
+    let radiusZ = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 2.1, 2.5);
+    this.radiusZArr.push(radiusZ)
+
+    let size = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 100, 80);
+    this.sizeArr.push(size)
+
+
+    }
+
+
+
   }
 
   initIceFloe(){
@@ -183,8 +222,6 @@ export default class Scene {
     this.icePosX7 = []
     this.icePosZ7 = []
 
-
-    console.log('minval',this.valueMin);
     for (let i = 0;i < STORAGE.valueArray.length; i++) {
       let scaleValue2  = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 0, -20);
       this.icePosZ2.push(scaleValue2)
@@ -269,6 +306,30 @@ export default class Scene {
 
         TweenMax.to(this.iceArr[7].position,1.5,{y:this.icePosY7[STORAGE.currentPos]});
         TweenMax.to(this.iceArr[7].position,1.5,{x:this.icePosX7[STORAGE.currentPos]});
+
+
+        // this.snow.parameters.speedH = .4
+        // this.snow.parameters.speedV = .4
+        // this.snow.parameters.scale = 5.
+        // this.snow.parameters.radiusX = 2.
+        // this.snow.parameters.radiusZ = 2.
+        // this.snow.parameters.size = 80.
+        this.snow.systemMaterial.uniforms.speedH.value = this.speedHarr[STORAGE.currentPos]
+        this.snow.systemMaterial.uniforms.speedV.value = this.speedVarr[STORAGE.currentPos]
+        this.snow.systemMaterial.uniforms.scale.value = this.scaleArr[STORAGE.currentPos]
+        this.snow.systemMaterial.uniforms.radiusX.value = this.radiusXArr[STORAGE.currentPos]
+        this.snow.systemMaterial.uniforms.radiusZ.value = this.radiusZArr[STORAGE.currentPos]
+        this.snow.systemMaterial.uniforms.size.value = this.sizeArr[STORAGE.currentPos]
+
+
+        // this.snow.parameters.speedH = 
+        // this.snow.parameters.speedV = this.speedVarr[STORAGE.currentPos]
+        // this.snow.parameters.scale =  this.scaleArr[STORAGE.currentPos]
+        // this.snow.parameters.radiusX = this.radiusXArr[STORAGE.currentPos]
+        // this.snow.parameters.radiusZ = this.radiusZArr[STORAGE.currentPos]
+        // this.snow.parameters.size = this.sizeArr[STORAGE.currentPos]
+       // console.log(this.snow.parameters.speedH)
+
 
          //scene.timelineValue = this.current;
        })

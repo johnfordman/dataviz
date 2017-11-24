@@ -34,31 +34,36 @@ export default class Snow {
 			return (v * (Math.random() - 0.5));
 		}
 		var textureLoader = new THREE.TextureLoader();
+
+		this.uniforms = {
+			color:  { type: 'c', value: new THREE.Color( this.parameters.color ) },
+			height: { type: 'f', value: this.parameters.height },
+			elapsedTime: { type: 'f', value: 0 },
+			radiusX: { type: 'f', value: this.parameters.radiusX },
+			radiusZ: { type: 'f', value: this.parameters.radiusZ },
+			size: { type: 'f', value: this.parameters.size },
+			scale: { type: 'f', value: this.parameters.scale },
+			opacity: { type: 'f', value: this.parameters.opacity },
+			texture: { type: 't', value: null },
+			speedH: { type: 'f', value: this.parameters.speedH },
+			speedV: { type: 'f', value: this.parameters.speedV }
+		}
+
+		this.systemMaterial = new THREE.ShaderMaterial({
+			uniforms: this.uniforms,
+			vertexShader: vertShader,
+			fragmentShader: fragShader,
+			blending: THREE.AdditiveBlending,
+			transparent: true,
+			depthTest: false
+		});
+
 		textureLoader.load(snow, (texture) => {
+			this.uniforms.texture.value = texture
 			this.isLoad = true
 			this.textureSnow = texture
 			this.systemGeometry = new THREE.Geometry(),
-			this.systemMaterial = new THREE.ShaderMaterial({
-				uniforms: {
-					color:  { type: 'c', value: new THREE.Color( this.parameters.color ) },
-					height: { type: 'f', value: this.parameters.height },
-					elapsedTime: { type: 'f', value: 0 },
-					radiusX: { type: 'f', value: this.parameters.radiusX },
-					radiusZ: { type: 'f', value: this.parameters.radiusZ },
-					size: { type: 'f', value: this.parameters.size },
-					scale: { type: 'f', value: this.parameters.scale },
-					opacity: { type: 'f', value: this.parameters.opacity },
-					texture: { type: 't', value: this.textureSnow },
-					speedH: { type: 'f', value: this.parameters.speedH },
-					speedV: { type: 'f', value: this.parameters.speedV }
-				},
-				vertexShader: vertShader,
-				fragmentShader: fragShader,
-				blending: THREE.AdditiveBlending,
-				transparent: true,
-				depthTest: false
-			});
-
+	
 			for( var i = 0; i < this.numParticles; i++ ) {
 				var vertex = new THREE.Vector3(
 					rand( this.width ),
