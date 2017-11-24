@@ -13,6 +13,13 @@ html, body {
 	-ms-user-select: none; /* Internet Explorer/Edge */
 	user-select: none;
 }
+
+.logo svg{
+	width: 14%;
+	position: fixed;
+	top: .8em;
+	left: 30px;
+}
 .title{
 	position: fixed;
 	margin: 0;
