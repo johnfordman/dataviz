@@ -191,20 +191,66 @@ html, body {
 	display: flex;
 	justify-content: space-between;
 }
+.fix_data-col-2{
+	width: 19em;
+}
 
 .fix_data-container.is_hidden{
 	opacity: 0;
 	transition: .3s opacity ease ;
 }
+
+.fix_data.maxco2 .fix_data-number{
+	animation: typing 2s steps(30, end) forwards;
+}
+
+.fix_data.maxco2 .fix_data-text{
+	animation: typing 2s 2s steps(30, end) forwards;
+}
+
+.fix_data.minco2 .fix_data-number{
+	animation: typing 2s 4s steps(30, end) forwards;
+}
+
+.fix_data.minco2 .fix_data-text{
+	animation: typing 2s 6s steps(30, end) forwards;
+}
+
+.fix_data.averrageco2 .fix_data-number{
+	animation: typing 2s 8s steps(30, end) forwards;
+}
+
+.fix_data.averrageco2 .fix_data-text{
+	animation: typing 2s 10s steps(30, end) forwards;
+}
+
+.fix_data.percentageco2 .fix_data-number{
+	animation: typing 2s 12s steps(30, end) forwards;
+}
+
+.fix_data.percentageco2 .fix_data-text{
+	animation: typing 2s 13s steps(30, end) forwards;
+}
 .fix_data-number{
+	width: 0;
 	font-size:1.875em;
 	font-weight: normal;
+	letter-spacing: 2.1px; /* Adjust as needed */
+
+	white-space: nowrap;
+	overflow: hidden;
+
 }
 
 .fix_data-text{
 	margin: 0;
 	font-size:1.250em ;
 	font-weight: 200;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 0;
+	/*animation: typing 2.5s steps(30, end);*/
+
 }
 body.is-grabbing{
 	cursor: -webkit-grabbing;
@@ -223,4 +269,9 @@ body.is-grabbing .container-ui .cursor{
 body.is-grabbing .container-ui .cursor-line-move{
 	opacity: 0;
 	transition: .3s opacity ease;
+}
+
+@keyframes typing {
+	from { width: 0 }
+	to { width: 100% }
 }

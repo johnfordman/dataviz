@@ -9,7 +9,7 @@ import TweenMax from 'gsap'
 export default class Timeline extends Event {
 
 	constructor(nbPoint,valueArr,yearArr) {
-    console.log(window.STORAGE)
+    //console.log(window.STORAGE)
     //iceFloe from storage
     super()
     this.iceArr = window.STORAGE.icefloe
@@ -77,9 +77,9 @@ export default class Timeline extends Event {
 
 
 drawPoint(){
-  console.log('max value',this.valueMax)
-  console.log('min value',this.valueMin)
-  console.log(this.valueArr)
+  // console.log('max value',this.valueMax)
+  // console.log('min value',this.valueMin)
+  // console.log(this.valueArr)
 
   for(let i = 0;i < this.nbPoint; i++){
     let pointY  = numbersUtils.map(this.valueArr[i], this.valueMin, this.valueMax, 100-5, 5);
@@ -93,8 +93,8 @@ drawPoint(){
 drawLines(){
   this.ctx.save()
   this.ctx.beginPath()
-  console.log(this.pointArr[0].xPos)
-  console.log(this.pointArr[0].yPos)
+  // console.log(this.pointArr[0].xPos)
+  // console.log(this.pointArr[0].yPos)
 
   this.ctx.moveTo(this.pointArr[0].xPos, this.pointArr[0].yPos)
   for(var i = 0; i< this.pointArr.length; i++){
