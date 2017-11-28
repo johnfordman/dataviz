@@ -175,7 +175,7 @@ export default class Scene {
     let radiusZ = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 2.1, 2.5);
     this.radiusZArr.push(radiusZ)
 
-    let size = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 100, 80);
+    let size = numbersUtils.map(STORAGE.valueArray[i], this.valueMin, this.valueMax, 65, 45);
     this.sizeArr.push(size)
 
 

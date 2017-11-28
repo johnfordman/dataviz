@@ -19,7 +19,7 @@ export default class Snow {
 			height: this.particleSystemHeight,
 			radiusX: 2.5,
 			radiusZ: 2.5,
-			size: 100,
+			size: 65,
 			scale: 7.0,
 			opacity: .7,
 			speedH: 1.,
