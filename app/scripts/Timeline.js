@@ -141,6 +141,8 @@ drag(){
 
         var alpha = (b.yPos - a.yPos) / (b.xPos - a.xPos);
         var beta = b.yPos - alpha*b.xPos;
+
+        this.cursor.setAttribute("data-value",  `${numberWithSpaces(this.valueArr[aR])}`)
         this.cursor.setAttribute("style", `top:${alpha*left + beta}; transform:translateX(${left}px);`)
         this.cursorBar.setAttribute("style", `transform:translateX(${left}px);`)
         this.dispatch("drag")

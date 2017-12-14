@@ -96,6 +96,18 @@ html, body {
 	width: .5px;
 }
 
+
+.cursor::before{
+	content: " "attr(data-value) " kt";
+	position: absolute;
+	top:-45px;
+	left:-40px;
+	color: #fff;
+	width: 200px;	
+	font-size: 1.5em;
+	letter-spacing: .8;
+}
+
 .cursor_point{
 	position: absolute;
 	left: 50%;
@@ -266,7 +278,20 @@ body.is-grabbing .container-ui canvas{
 
 body.is-grabbing .container-ui .cursor{
 	opacity: 1;
+	/*transform:scale(1.2);*/
 	transition: .3s opacity ease .5s;
+}
+
+body.is-grabbing .container-ui .cursor .cursor_point{
+	opacity: 0;
+	transition: .3s opacity ease;
+}
+
+
+
+body.is-grabbing .container-ui .cursor::before{
+	opacity: 0;
+	transition: .3s opacity ease ;
 }
 
 body.is-grabbing .container-ui .cursor-line-move{

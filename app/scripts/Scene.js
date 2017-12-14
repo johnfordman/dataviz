@@ -277,7 +277,7 @@ export default class Scene {
 
   initTimeline(){
     let timeline = new Timeline(STORAGE.valuelength,STORAGE.valueArray,STORAGE.yearArray);
-
+    
     timeline.on("drag", () =>{
         // console.log("drag")
         this.isDrag = true;
@@ -307,13 +307,6 @@ export default class Scene {
         TweenMax.to(this.iceArr[7].position,1.5,{y:this.icePosY7[STORAGE.currentPos]});
         TweenMax.to(this.iceArr[7].position,1.5,{x:this.icePosX7[STORAGE.currentPos]});
 
-
-        // this.snow.parameters.speedH = .4
-        // this.snow.parameters.speedV = .4
-        // this.snow.parameters.scale = 5.
-        // this.snow.parameters.radiusX = 2.
-        // this.snow.parameters.radiusZ = 2.
-        // this.snow.parameters.size = 80.
         this.snow.systemMaterial.uniforms.speedH.value = this.speedHarr[STORAGE.currentPos]
         this.snow.systemMaterial.uniforms.speedV.value = this.speedVarr[STORAGE.currentPos]
         this.snow.systemMaterial.uniforms.scale.value = this.scaleArr[STORAGE.currentPos]
@@ -321,17 +314,6 @@ export default class Scene {
         this.snow.systemMaterial.uniforms.radiusZ.value = this.radiusZArr[STORAGE.currentPos]
         this.snow.systemMaterial.uniforms.size.value = this.sizeArr[STORAGE.currentPos]
 
-
-        // this.snow.parameters.speedH = 
-        // this.snow.parameters.speedV = this.speedVarr[STORAGE.currentPos]
-        // this.snow.parameters.scale =  this.scaleArr[STORAGE.currentPos]
-        // this.snow.parameters.radiusX = this.radiusXArr[STORAGE.currentPos]
-        // this.snow.parameters.radiusZ = this.radiusZArr[STORAGE.currentPos]
-        // this.snow.parameters.size = this.sizeArr[STORAGE.currentPos]
-       // console.log(this.snow.parameters.speedH)
-
-
-         //scene.timelineValue = this.current;
        })
 
     timeline.on("dragup", () =>{
